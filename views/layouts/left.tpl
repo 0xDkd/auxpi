@@ -16,7 +16,7 @@
             <i class="mdui-list-item-icon mdui-icon material-icons iconfont icon-guanyu3 mdui-text-color-teal"></i>
             <div class="mdui-list-item-content">说明</div>
         </a>
-        <a class="mdui-list-item mdui-ripple " href="{{urlfor "PagesController.AboutShow"}}">
+        <a class="mdui-list-item mdui-ripple " href="https://github.com/aimerforreimu/AUXPI" target="_blank">
             <i class="mdui-list-item-icon mdui-icon material-icons iconfont icon-github mdui-text-color-black"></i>
             <div class="mdui-list-item-content">项目地址</div>
         </a>
