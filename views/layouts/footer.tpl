@@ -11,7 +11,7 @@
 </div>
 <footer>
     <div class="mdui-container">
-        Copyright &copy; 2018 <a href="{{ .siteUrl}}">{{ .siteName}}</a>. All rights reserved.
+        Copyright &copy; 2018 <a href="{{ .siteUrl}}">{{ .siteName}}</a>. All rights reserved. ❤ <a href="https://github.com/aimerforreimu/AUXPI" target="_blank">项目地址</a>
     {{.siteFooterText}}
     </div>
 </footer>

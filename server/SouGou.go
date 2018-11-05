@@ -18,7 +18,7 @@ func (this *SouGou) UpLoadToSouGou(img []byte) string {
 	sufStr := "DQotLS0tLS1XZWJLaXRGb3JtQm91bmRhcnlHTGZHQjBIZ1VOdHBUVDFrLS0NCg=="
 	preStr = bootstrap.Decode(base64.StdEncoding, preStr)
 	sufStr = bootstrap.Decode(base64.StdEncoding, sufStr)
-	imgStr := bootstrap.Decode(base64.StdEncoding, base64.StdEncoding.EncodeToString(img))
+	imgStr := string(img)
 	data := []byte(preStr + string(img) + sufStr)
 	url := "http://pic.sogou.com/pic/upload_pic.jsp"
 	client := &http.Client{}

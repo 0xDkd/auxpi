@@ -1,10 +1,10 @@
 package server
 
 import (
+	"auxpi/auxpiAll"
 	"auxpi/bootstrap"
 	"encoding/base64"
 	"fmt"
-	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/cache"
 	"hash/crc32"
 	"io/ioutil"
@@ -18,39 +18,12 @@ import (
 type Sina struct {
 }
 
-//easyjson:json
-type SinaMsg struct {
-	Code string   `json:"code"`
-	Data SinaData `json:"data"`
-}
-
-//easyjson:json
-type SinaData struct {
-	Count int      `json:"count"`
-	Data  string   `json:"data"`
-	Pics  SinaPics `json:"pics"`
-}
-
-//easyjson:json
-type SinaPics struct {
-	Pic_1 picInfo `json:"pic_1"`
-}
-
-//easyjson:json
-type picInfo struct {
-	Width  int    `json:"width"`
-	Size   int    `json:"size"`
-	Ret    int    `json:"ret"`
-	Height int    `json:"height"`
-	Name   string `json:"name"`
-	Pid    string `json:"pid"`
-}
-
 var picType = []string{"png", "jpg", "jpeg", "gif", "bmp"}
 var memoryCache, _ = cache.NewCache("memory", `{"interval":3600}`)
 //获取 config 的配置
 var siteConfig = bootstrap.Config()
 
+//新浪图床登录
 func (this *Sina) Login(name string, pass string) interface{} {
 	url := "https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.15)&_=1403138799543"
 	userInfo := make(map[string]string)
@@ -60,7 +33,7 @@ func (this *Sina) Login(name string, pass string) interface{} {
 	return cookie
 }
 
-//返回综合 []*httpCookie
+//获取新浪图床 Cookie
 func (this *Sina) getCookies(durl string, data map[string]string) (interface{}) {
 	//尝试从缓存里面获取 Cookie
 	if memoryCache.Get("SinaCookies") != nil {
@@ -131,6 +104,7 @@ func (this *Sina) UpLoadToSina(img []byte, imgType string) string {
 	return this.getSinaUrl(body, imgType)
 }
 
+//获取 Sina 图床 URL
 func (this *Sina) getSinaUrl(body []byte, imgType string) string {
 	str := string(body)
 	//正则获取
@@ -139,8 +113,7 @@ func (this *Sina) getSinaUrl(body []byte, imgType string) string {
 	res := regexp.MustCompile(pat)
 	rule := regexp.MustCompile(check)
 	jsons := res.FindAllStringSubmatch(str, -1)
-	//beego.Alert(rule, jsons)
-	msg := SinaMsg{}
+	msg := auxpi.SinaMsg{}
 	//解析 json 到 struct
 	msg.UnmarshalJSON([]byte(jsons[0][1]))
 	//验证 pid 的合法性
@@ -156,8 +129,6 @@ func (this *Sina) getSinaUrl(body []byte, imgType string) string {
 			suffix = "jpg"
 		}
 		sinaUrl := "https://ws" + sinaNumber + ".sinaimg.cn/" + size + "/" + pid + "." + suffix
-		//转成 rune 直接截取即可 "image/png"
-		beego.Alert(sinaUrl)
 		return sinaUrl
 	}
 	return ""

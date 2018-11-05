@@ -1,40 +1,21 @@
 package controllers
 
 import (
-	"auxpi/server"
-	"encoding/base64"
+	"auxpi/auxpiAll"
+	"auxpi/bootstrap"
+	"auxpi/utils"
 	"github.com/astaxie/beego"
 	"log"
 	"strings"
 )
 
-//easyjson:json
 type UpLoadController struct {
 	beego.Controller
-	server.Sina
-	server.SouGou
-}
-
-//easyjson:json
-type ResultJson struct {
-	Code int      `json:"code"`
-	Msg  string   `json:"msg"`
-	Data fileData `json:"data"`
-}
-
-//easyjson:json
-type fileData struct {
-	Name string `json:"name"`
-	Url  string `json:"url"`
-}
-
-//easyjson:json
-type ErrorJson struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
+	utils.UpLoadTools
 }
 
 var picType = []string{"png", "jpg", "jpeg", "gif", "bmp"}
+var siteConfig = bootstrap.Config()
 
 func (c *UpLoadController) URLMapping() {
 	c.Mapping("UpLoad", c.AuthUpLoadHandle)
@@ -49,75 +30,46 @@ func (this *UpLoadController) AuthUpLoadHandle() {
 	if err != nil {
 		log.Fatal("File Upload Err", err)
 	}
-	imgMime := h.Header.Get("Content-Type")
+	//是否为空文件
+	if f == nil {
+		this.errorResp(500, "No files were uploaded.")
+	}
+	//检测是否超出大小限制
+	if h.Size > siteConfig.SiteUpLoadMaxSize<<20 {
+		this.errorResp(500, "File is too large.")
+	}
 	//验证
-	validate := this.validate(imgMime, h.Filename)
+	validate := this.Validate(h.Header.Get("Content-Type"), h.Filename)
 	if validate {
-		//读取文件
-		size := h.Size
-		fileContent := make([]byte, size)
-		f.Read(fileContent)
-		url := ""
-		switch apiSelect {
-		case "SouGou":
-			url = this.UpLoadToSouGou(fileContent)
-		case "Sina":
-			url = this.UpLoadToSina(fileContent, imgMime)
-		default:
-			url = ""
-		}
+		url := this.HandleUrl(apiSelect, f, h)
 		//如果有返回值
 		if strings.HasPrefix(url, "http") {
-			//配置 json
-			result := &ResultJson{}
-			result.Code = 200
-			result.Msg = "上传成功"
-			result.Data.Url = url
-			result.Data.Name = h.Filename
-			//beego.Alert(result)
-			this.Data["json"] = result
-			this.ServeJSON()
-			return
+			this.succResp(200, "上传成功", url, h.Filename)
 		}
 
 	}
 	//返回失败 json
-	result := &ErrorJson{}
-	result.Code = 500
-	result.Msg = "上传失败"
-	this.Data["json"] = result
-	this.ServeJSON()
+	this.errorResp(500, "上传失败")
 	return
 }
 
-//验证文件后缀&文件MIME
-func (this *UpLoadController) validate(contentType string, fileName string) bool {
-	//首先检测文件的后缀
-	isSuffix := false
-	for _, pType := range picType {
-		if strings.HasSuffix(fileName, pType) {
-			isSuffix = true
-			break
-		}
-	}
-	//然后检测 MIME 类型
-	//beego.Alert(contentType)
-	if strings.HasPrefix(contentType, "image") && isSuffix {
-		for _, pType := range picType {
-			if strings.HasSuffix(contentType, pType) {
-				return true
-			}
-		}
-
-	}
-	return false
+//错误resp
+func (this *UpLoadController) errorResp(code int, msg string) {
+	result := &auxpi.ErrorJson{}
+	result.Code = code
+	result.Msg = msg
+	this.Data["json"] = result
+	this.ServeJSON()
 }
 
-//tools---
-func Decode(enc *base64.Encoding, str string) string {
-	data, err := enc.DecodeString(str)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
+//成功 resp
+func (this *UpLoadController) succResp(code int, msg string, url string, name string) {
+	result := &auxpi.ResultJson{}
+	result.Code = code
+	result.Msg = msg
+	result.Data.Url = url
+	result.Data.Name = name
+	//beego.Alert(result)
+	this.Data["json"] = result
+	this.ServeJSON()
 }
