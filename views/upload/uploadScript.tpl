@@ -37,6 +37,7 @@
     }).on("fileuploaded", function (event, data, previewId, index) {
         var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
         if (200 === response.code) {
+            app.msg(true,response.data.name+"上传完成");
             $("#code-url ul").prepend("<li>" + response.data.url + "<i class=\"copy iconfont icon-copy\"></i></li>");
             $("#code-html ul").prepend("<li>&lt;img src=\"" + response.data.url + "\" alt=\"" + response.data.name + "\" title=\"" + response.data.name + "\" /&gt;<i class=\"copy iconfont icon-copy\"></i></li>");
             $("#code-bbcode ul").prepend("<li>[img]" + response.data.url + "[/img]<i class=\"copy iconfont icon-copy\"></i></li>");

@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <meta name="keywords" content="{{.siteName}}"/>
-    <meta name="description" content="{{.siteName}} sina Pictures & SouGou Pirtures & pictures upload"/>
+    <meta name="keywords" content="{{.siteName}} ,新浪图床,搜狗图床,API图床,图片上传"/>
+    <meta name="description" content="{{.siteName}} 新浪图床，搜狗图床，图片上传，API 图床"/>
     <title>{{ .siteName}}</title>
 
     <link href="/static/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">

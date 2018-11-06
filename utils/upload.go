@@ -1,16 +1,13 @@
 package utils
 
 import (
-	"auxpi/auxpiAll"
 	"auxpi/bootstrap"
 	"auxpi/server"
-	"github.com/astaxie/beego"
 	"mime/multipart"
 	"strings"
 )
 
 type UpLoadTools struct {
-	beego.Controller
 	server.Smms
 	server.SouGou
 	server.Sina
@@ -72,22 +69,3 @@ func (this *UpLoadTools) Validate(contentType string, fileName string) bool {
 	return false
 }
 
-//错误resp
-func (this *UpLoadTools) ErrorResp(code int, msg string) {
-	result := &auxpi.ErrorJson{}
-	result.Code = code
-	result.Msg = msg
-	this.Data["json"] = result
-	this.ServeJSON()
-}
-
-func (this *UpLoadTools) SuccResp(code int, msg string, url string, name string) {
-	result := &auxpi.ResultJson{}
-	result.Code = code
-	result.Msg = msg
-	result.Data.Url = url
-	result.Data.Name = name
-	//beego.Alert(result)
-	this.Data["json"] = result
-	this.ServeJSON()
-}

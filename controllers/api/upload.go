@@ -2,6 +2,7 @@ package api
 
 import (
 	"auxpi/auxpiAll"
+	"auxpi/auxpiAll/e"
 	"auxpi/bootstrap"
 	"auxpi/utils"
 	"github.com/astaxie/beego"
@@ -28,7 +29,7 @@ func (this *ApiUpLoadController) ApiUpLoadHandle() {
 		//需要进行验证
 		apiToken := this.GetString("token")
 		if apiToken != siteConfig.ApiToken {
-			this.errorResp(403, "Forbidden")
+			this.errorResp(e.ERROR_AUTH_CHECK_TOKEN_FAIL)
 			return
 		}
 	}
@@ -36,10 +37,10 @@ func (this *ApiUpLoadController) ApiUpLoadHandle() {
 	apiSelect := this.GetString("apiSelect")
 	f, h, err := this.GetFile("image")
 	if f == nil {
-		this.errorResp(500, "No files were uploaded.")
+		this.errorResp(e.ERROR_FILE_IS_EMPTY)
 	}
 	if h.Size > siteConfig.SiteUpLoadMaxSize<<20 {
-		this.errorResp(500, "File is too large.")
+		this.errorResp(e.ERROR_FILE_IS_TOO_LARGE)
 	}
 	defer f.Close()
 	if err != nil {
@@ -52,17 +53,18 @@ func (this *ApiUpLoadController) ApiUpLoadHandle() {
 
 		//如果有返回值
 		if strings.HasPrefix(url, "http") {
-			this.succResp(200, "上传成功", url, h.Filename)
+			this.succResp(200, url, h.Filename)
 			return
 		}
+		this.errorResp(e.ERROR_CAN_NOT_GET_IMG_URL)
 	}
 	//返回失败 json
-	this.errorResp(500, "上传失败")
+	this.errorResp(e.ERROR_FILE_TYPE)
 	return
 }
 
 func (this *ApiUpLoadController) ErrorCapture() {
-	this.errorResp(405, "Method not allowed")
+	this.errorResp(e.METHOD_NOT_ALLOWED)
 }
 
 //验证文件后缀&文件MIME
@@ -89,22 +91,22 @@ func (this *ApiUpLoadController) validate(contentType string, fileName string) b
 }
 
 //错误resp
-func (this *ApiUpLoadController) errorResp(code int, msg string) {
+func (this *ApiUpLoadController) errorResp(code int) {
 	result := &auxpi.ErrorJson{}
 	result.Code = code
-	result.Msg = msg
+	result.Msg = e.GetMsg(code)
 	this.Data["json"] = result
 	this.ServeJSON()
 }
 
 //成功 resp
-func (this *ApiUpLoadController) succResp(code int, msg string, url string, name string) {
+func (this *ApiUpLoadController) succResp(code int, url string, name string) {
 	result := &auxpi.ResultJson{}
 	result.Code = code
-	result.Msg = msg
+	result.Msg = e.GetMsg(code)
 	result.Data.Url = url
 	result.Data.Name = name
-	//beego.Alert(result)
 	this.Data["json"] = result
 	this.ServeJSON()
 }
+

@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"auxpi/auxpiAll"
+	"auxpi/auxpiAll/e"
 	"auxpi/bootstrap"
 	"auxpi/utils"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 	"log"
 	"strings"
 )
@@ -32,11 +34,13 @@ func (this *UpLoadController) AuthUpLoadHandle() {
 	}
 	//是否为空文件
 	if f == nil {
-		this.errorResp(500, "No files were uploaded.")
+		this.errorResp(e.ERROR_FILE_IS_EMPTY)
+		return
 	}
 	//检测是否超出大小限制
 	if h.Size > siteConfig.SiteUpLoadMaxSize<<20 {
-		this.errorResp(500, "File is too large.")
+		this.errorResp(e.ERROR_FILE_IS_TOO_LARGE)
+		return
 	}
 	//验证
 	validate := this.Validate(h.Header.Get("Content-Type"), h.Filename)
@@ -44,32 +48,34 @@ func (this *UpLoadController) AuthUpLoadHandle() {
 		url := this.HandleUrl(apiSelect, f, h)
 		//如果有返回值
 		if strings.HasPrefix(url, "http") {
-			this.succResp(200, "上传成功", url, h.Filename)
+			this.succResp(200, url, h.Filename)
+			return
 		}
-
+		logs.Notice(h.Filename + "上传" + apiSelect + "失败")
+		this.errorResp(e.ERROR_CAN_NOT_GET_IMG_URL)
+		return
 	}
 	//返回失败 json
-	this.errorResp(500, "上传失败")
+	this.errorResp(e.ERROR_FILE_TYPE)
 	return
 }
 
 //错误resp
-func (this *UpLoadController) errorResp(code int, msg string) {
+func (this *UpLoadController) errorResp(code int) {
 	result := &auxpi.ErrorJson{}
 	result.Code = code
-	result.Msg = msg
+	result.Msg = e.GetMsg(code)
 	this.Data["json"] = result
 	this.ServeJSON()
 }
 
 //成功 resp
-func (this *UpLoadController) succResp(code int, msg string, url string, name string) {
+func (this *UpLoadController) succResp(code int, url string, name string) {
 	result := &auxpi.ResultJson{}
 	result.Code = code
-	result.Msg = msg
+	result.Msg = e.GetMsg(code)
 	result.Data.Url = url
 	result.Data.Name = name
-	//beego.Alert(result)
 	this.Data["json"] = result
 	this.ServeJSON()
 }
