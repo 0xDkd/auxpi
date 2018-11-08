@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-type UpLoadController struct {
+type WebUpLoadController struct {
 	beego.Controller
 	utils.UpLoadTools
 }
@@ -19,12 +19,8 @@ type UpLoadController struct {
 var picType = []string{"png", "jpg", "jpeg", "gif", "bmp"}
 var siteConfig = bootstrap.Config()
 
-func (c *UpLoadController) URLMapping() {
-	c.Mapping("UpLoad", c.AuthUpLoadHandle)
-}
-
-// @router /api/v1/auth/upload/ [post]
-func (this *UpLoadController) AuthUpLoadHandle() {
+//代码冗余，但是使用 API 会造成不必要的消耗
+func (this *WebUpLoadController) UpLoadHandle() {
 	//获取上传类型
 	apiSelect := this.GetString("apiSelect")
 	f, h, err := this.GetFile("image")
@@ -61,7 +57,7 @@ func (this *UpLoadController) AuthUpLoadHandle() {
 }
 
 //错误resp
-func (this *UpLoadController) errorResp(code int) {
+func (this *WebUpLoadController) errorResp(code int) {
 	result := &auxpi.ErrorJson{}
 	result.Code = code
 	result.Msg = e.GetMsg(code)
@@ -70,7 +66,7 @@ func (this *UpLoadController) errorResp(code int) {
 }
 
 //成功 resp
-func (this *UpLoadController) succResp(code int, url string, name string) {
+func (this *WebUpLoadController) succResp(code int, url string, name string) {
 	result := &auxpi.ResultJson{}
 	result.Code = code
 	result.Msg = e.GetMsg(code)

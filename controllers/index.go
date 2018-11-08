@@ -12,14 +12,9 @@ type PagesController struct {
 //获取 config 的配置
 var siteConfig = bootstrap.Config()
 
-func (c *PagesController) URLMapping() {
-	c.Mapping("Show", c.IndexShow)
-	c.Mapping("SinaShow", c.SinaShow)
-	c.Mapping("SmmsShow", c.SmmsShow)
-	c.Mapping("AboutShow", c.AboutShow)
-}
 
-// @router / [get]
+
+
 func (this *PagesController) IndexShow() {
 	this.Data["siteName"] = siteConfig.SiteName
 	this.Data["siteUrl"] = siteConfig.SiteUrl
@@ -33,15 +28,15 @@ func (this *PagesController) IndexShow() {
 	this.Data["iconColor"] = "orange"
 	this.Data["xsrf_token"] = this.XSRFToken()
 	this.LayoutSections = make(map[string]string)
-	this.LayoutSections["Scripts"] = "upload/uploadScript.tpl"
+	this.LayoutSections["Scripts"] = "webUpload/uploadScript.tpl"
 	this.LayoutSections["Header"] = "layouts/header.tpl"
 	this.LayoutSections["Footer"] = "layouts/footer.tpl"
 	this.LayoutSections["Left"] = "layouts/left.tpl"
 	this.Layout = "layouts/app.tpl"
-	this.TplName = "upload/box.tpl"
+	this.TplName = "webUpload/box.tpl"
 }
 
-// @router /Sina [get]
+
 func (this *PagesController) SinaShow() {
 	this.Data["siteName"] = siteConfig.SiteName
 	this.Data["siteUrl"] = siteConfig.SiteUrl
@@ -55,20 +50,20 @@ func (this *PagesController) SinaShow() {
 	this.Data["apiSelect"] = "Sina"
 	this.Data["iconStyle"] = "xinlang"
 	this.Data["iconColor"] = "red"
-	this.LayoutSections["Scripts"] = "upload/uploadScript.tpl"
+	this.LayoutSections["Scripts"] = "webUpload/uploadScript.tpl"
 	this.LayoutSections["Header"] = "layouts/header.tpl"
 	this.LayoutSections["Footer"] = "layouts/footer.tpl"
 	this.LayoutSections["Left"] = "layouts/left.tpl"
 	this.Layout = "layouts/app.tpl"
 	//检测是否开启新浪图床
 	if siteConfig.SiteUploadWay.OpenSinaPicStore {
-		this.TplName = "upload/box.tpl"
+		this.TplName = "webUpload/box.tpl"
 		return
 	}
-	this.TplName = "upload/ban.tpl"
+	this.TplName = "webUpload/ban.tpl"
 }
 
-// @router /Smms [get]
+
 func (this *PagesController) SmmsShow() {
 	this.Data["siteName"] = siteConfig.SiteName
 	this.Data["siteUrl"] = siteConfig.SiteUrl
@@ -82,22 +77,21 @@ func (this *PagesController) SmmsShow() {
 	this.Data["apiSelect"] = "Smms"
 	this.Data["iconStyle"] = "sm"
 	this.Data["iconColor"] = "blue"
-	this.LayoutSections["Scripts"] = "upload/uploadScript.tpl"
+	this.LayoutSections["Scripts"] = "webUpload/uploadScript.tpl"
 	this.LayoutSections["Header"] = "layouts/header.tpl"
 	this.LayoutSections["Footer"] = "layouts/footer.tpl"
 	this.LayoutSections["Left"] = "layouts/left.tpl"
 	this.Layout = "layouts/app.tpl"
-	this.TplName = "upload/box.tpl"
+	this.TplName = "webUpload/box.tpl"
 
 }
 
-// @router /about/ [get]
 func (this *PagesController) AboutShow() {
 	this.Data["siteName"] = siteConfig.SiteName
 	this.Data["siteUrl"] = siteConfig.SiteUrl
 	this.Data["siteFooterText"] = siteConfig.SiteFooter
 	this.LayoutSections = make(map[string]string)
-	this.LayoutSections["Scripts"] = "upload/uploadScript.tpl"
+	this.LayoutSections["Scripts"] = "webUpload/uploadScript.tpl"
 	this.LayoutSections["Header"] = "layouts/header.tpl"
 	this.LayoutSections["Footer"] = "layouts/footer.tpl"
 	this.LayoutSections["Left"] = "layouts/left.tpl"

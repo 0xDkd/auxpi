@@ -23,7 +23,7 @@ func (this *ApiUpLoadController) Prepare() {
 var picType = []string{"png", "jpg", "jpeg", "gif", "bmp"}
 var siteConfig = bootstrap.Config()
 
-func (this *ApiUpLoadController) ApiUpLoadHandle() {
+func (this *ApiUpLoadController) UpLoadHandle() {
 	//检测是否开启 token 认证
 	if siteConfig.ApiToken != "" {
 		//需要进行验证
