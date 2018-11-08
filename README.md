@@ -273,7 +273,7 @@ GOOS=darwin GOARCH=amd64 bee pack
 ```json
 {
     "code": 500,
-    "msg": "上传失败"
+    "msg": "上传出错"
 }
 ```
 
@@ -289,8 +289,8 @@ API 未开启返回值
  
 ```json
 {
-    "code": 403,
-    "msg": "Forbidden"
+    "code": 20001,
+    "msg": "Token鉴权失败"
 }
 ```
 
@@ -299,8 +299,8 @@ API 未开启返回值
 ```json
 
 {
-    "code": 500,
-    "msg": "No files were uploaded."
+    "code": 10001,
+    "msg": "上传文件为空"
 }
 
 ```
@@ -310,8 +310,8 @@ API 未开启返回值
 ```json
 
 {
-    "code": 500,
-    "msg": "File is too large."
+    "code": 10002,
+    "msg": "上传文件太大"
 }
 
 ```
