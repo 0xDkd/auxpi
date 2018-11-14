@@ -629,6 +629,12 @@ func easyjsonB926644bDecodeAuxpiAuxpiAll5(in *jlexer.Lexer, out *SiteConfig) {
 			out.SiteUploadMaxNumber = int(in.Int())
 		case "site_up_load_max_size":
 			out.SiteUpLoadMaxSize = int64(in.Int64())
+		case "db_option":
+			(out.DbOption).UnmarshalEasyJSON(in)
+		case "jwt_secret":
+			out.JwtSecret = string(in.String())
+		case "auxpi_salt":
+			out.AuxpiSalt = string(in.String())
 		case "open_api_up_load":
 			out.OpenApiUpLoad = bool(in.Bool())
 		case "api_token":
@@ -702,6 +708,36 @@ func easyjsonB926644bEncodeAuxpiAuxpiAll5(out *jwriter.Writer, in SiteConfig) {
 			out.RawString(prefix)
 		}
 		out.Int64(int64(in.SiteUpLoadMaxSize))
+	}
+	{
+		const prefix string = ",\"db_option\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		(in.DbOption).MarshalEasyJSON(out)
+	}
+	{
+		const prefix string = ",\"jwt_secret\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.JwtSecret))
+	}
+	{
+		const prefix string = ",\"auxpi_salt\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.AuxpiSalt))
 	}
 	{
 		const prefix string = ",\"open_api_up_load\":"
@@ -1123,7 +1159,7 @@ func (v *ResultJson) UnmarshalJSON(data []byte) error {
 func (v *ResultJson) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonB926644bDecodeAuxpiAuxpiAll9(l, v)
 }
-func easyjsonB926644bDecodeAuxpiAuxpiAll10(in *jlexer.Lexer, out *ErrorJson) {
+func easyjsonB926644bDecodeAuxpiAuxpiAll10(in *jlexer.Lexer, out *RespJson) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -1146,6 +1182,14 @@ func easyjsonB926644bDecodeAuxpiAuxpiAll10(in *jlexer.Lexer, out *ErrorJson) {
 			out.Code = int(in.Int())
 		case "msg":
 			out.Msg = string(in.String())
+		case "data":
+			if m, ok := out.Data.(easyjson.Unmarshaler); ok {
+				m.UnmarshalEasyJSON(in)
+			} else if m, ok := out.Data.(json.Unmarshaler); ok {
+				_ = m.UnmarshalJSON(in.Raw())
+			} else {
+				out.Data = in.Interface()
+			}
 		default:
 			in.SkipRecursive()
 		}
@@ -1156,7 +1200,7 @@ func easyjsonB926644bDecodeAuxpiAuxpiAll10(in *jlexer.Lexer, out *ErrorJson) {
 		in.Consumed()
 	}
 }
-func easyjsonB926644bEncodeAuxpiAuxpiAll10(out *jwriter.Writer, in ErrorJson) {
+func easyjsonB926644bEncodeAuxpiAuxpiAll10(out *jwriter.Writer, in RespJson) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -1180,33 +1224,192 @@ func easyjsonB926644bEncodeAuxpiAuxpiAll10(out *jwriter.Writer, in ErrorJson) {
 		}
 		out.String(string(in.Msg))
 	}
+	{
+		const prefix string = ",\"data\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		if m, ok := in.Data.(easyjson.Marshaler); ok {
+			m.MarshalEasyJSON(out)
+		} else if m, ok := in.Data.(json.Marshaler); ok {
+			out.Raw(m.MarshalJSON())
+		} else {
+			out.Raw(json.Marshal(in.Data))
+		}
+	}
 	out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
-func (v ErrorJson) MarshalJSON() ([]byte, error) {
+func (v RespJson) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
 	easyjsonB926644bEncodeAuxpiAuxpiAll10(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
-func (v ErrorJson) MarshalEasyJSON(w *jwriter.Writer) {
+func (v RespJson) MarshalEasyJSON(w *jwriter.Writer) {
 	easyjsonB926644bEncodeAuxpiAuxpiAll10(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
-func (v *ErrorJson) UnmarshalJSON(data []byte) error {
+func (v *RespJson) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
 	easyjsonB926644bDecodeAuxpiAuxpiAll10(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *ErrorJson) UnmarshalEasyJSON(l *jlexer.Lexer) {
+func (v *RespJson) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonB926644bDecodeAuxpiAuxpiAll10(l, v)
 }
-func easyjsonB926644bDecodeAuxpiAuxpiAll11(in *jlexer.Lexer, out *Account) {
+func easyjsonB926644bDecodeAuxpiAuxpiAll11(in *jlexer.Lexer, out *DbOption) {
+	isTopLevel := in.IsStart()
+	if in.IsNull() {
+		if isTopLevel {
+			in.Consumed()
+		}
+		in.Skip()
+		return
+	}
+	in.Delim('{')
+	for !in.IsDelim('}') {
+		key := in.UnsafeString()
+		in.WantColon()
+		if in.IsNull() {
+			in.Skip()
+			in.WantComma()
+			continue
+		}
+		switch key {
+		case "use_db":
+			out.UseDb = bool(in.Bool())
+		case "db_type":
+			out.DbType = string(in.String())
+		case "db_host":
+			out.DbHost = string(in.String())
+		case "db_name":
+			out.DbName = string(in.String())
+		case "db_user":
+			out.DbUser = string(in.String())
+		case "dbl_pass":
+			out.DblPass = string(in.String())
+		case "table_prefix":
+			out.TablePrefix = string(in.String())
+		default:
+			in.SkipRecursive()
+		}
+		in.WantComma()
+	}
+	in.Delim('}')
+	if isTopLevel {
+		in.Consumed()
+	}
+}
+func easyjsonB926644bEncodeAuxpiAuxpiAll11(out *jwriter.Writer, in DbOption) {
+	out.RawByte('{')
+	first := true
+	_ = first
+	{
+		const prefix string = ",\"use_db\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Bool(bool(in.UseDb))
+	}
+	{
+		const prefix string = ",\"db_type\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.DbType))
+	}
+	{
+		const prefix string = ",\"db_host\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.DbHost))
+	}
+	{
+		const prefix string = ",\"db_name\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.DbName))
+	}
+	{
+		const prefix string = ",\"db_user\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.DbUser))
+	}
+	{
+		const prefix string = ",\"dbl_pass\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.DblPass))
+	}
+	{
+		const prefix string = ",\"table_prefix\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.TablePrefix))
+	}
+	out.RawByte('}')
+}
+
+// MarshalJSON supports json.Marshaler interface
+func (v DbOption) MarshalJSON() ([]byte, error) {
+	w := jwriter.Writer{}
+	easyjsonB926644bEncodeAuxpiAuxpiAll11(&w, v)
+	return w.Buffer.BuildBytes(), w.Error
+}
+
+// MarshalEasyJSON supports easyjson.Marshaler interface
+func (v DbOption) MarshalEasyJSON(w *jwriter.Writer) {
+	easyjsonB926644bEncodeAuxpiAuxpiAll11(w, v)
+}
+
+// UnmarshalJSON supports json.Unmarshaler interface
+func (v *DbOption) UnmarshalJSON(data []byte) error {
+	r := jlexer.Lexer{Data: data}
+	easyjsonB926644bDecodeAuxpiAuxpiAll11(&r, v)
+	return r.Error()
+}
+
+// UnmarshalEasyJSON supports easyjson.Unmarshaler interface
+func (v *DbOption) UnmarshalEasyJSON(l *jlexer.Lexer) {
+	easyjsonB926644bDecodeAuxpiAuxpiAll11(l, v)
+}
+func easyjsonB926644bDecodeAuxpiAuxpiAll12(in *jlexer.Lexer, out *Account) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -1243,7 +1446,7 @@ func easyjsonB926644bDecodeAuxpiAuxpiAll11(in *jlexer.Lexer, out *Account) {
 		in.Consumed()
 	}
 }
-func easyjsonB926644bEncodeAuxpiAuxpiAll11(out *jwriter.Writer, in Account) {
+func easyjsonB926644bEncodeAuxpiAuxpiAll12(out *jwriter.Writer, in Account) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -1293,23 +1496,23 @@ func easyjsonB926644bEncodeAuxpiAuxpiAll11(out *jwriter.Writer, in Account) {
 // MarshalJSON supports json.Marshaler interface
 func (v Account) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjsonB926644bEncodeAuxpiAuxpiAll11(&w, v)
+	easyjsonB926644bEncodeAuxpiAuxpiAll12(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v Account) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonB926644bEncodeAuxpiAuxpiAll11(w, v)
+	easyjsonB926644bEncodeAuxpiAuxpiAll12(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *Account) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjsonB926644bDecodeAuxpiAuxpiAll11(&r, v)
+	easyjsonB926644bDecodeAuxpiAuxpiAll12(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *Account) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjsonB926644bDecodeAuxpiAuxpiAll11(l, v)
+	easyjsonB926644bDecodeAuxpiAuxpiAll12(l, v)
 }

@@ -10,6 +10,9 @@ var MsgFlags = map[int]string {
 	ERROR_CAN_NOT_GET_IMG_URL : "无法获取第三方图床 URL",
 	ERROR_TOO_MANY_IMAGES : "上传图片太多",
 	ERROR_AUTH_CHECK_TOKEN_FAIL : "Token鉴权失败",
+	ERROR_AUTH_CHECK_TOKEN_TIMEOUT:"Token 过期",
+	ERROR_AUTH_TOKEN:"Token 不正确",
+	ERROR_AUTH:"认证失败",
 	ERROR_ACCESS_DENIED : "禁止访问",
 }
 

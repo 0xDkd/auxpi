@@ -4,14 +4,14 @@ import (
 	"auxpi/auxpiAll"
 	"auxpi/auxpiAll/e"
 	"auxpi/bootstrap"
+	"auxpi/controllers/api/base"
 	"auxpi/utils"
-	"github.com/astaxie/beego"
 	"log"
 	"strings"
 )
 
 type ApiUpLoadController struct {
-	beego.Controller
+	base.ApiController
 	utils.UpLoadTools
 }
 
@@ -21,14 +21,15 @@ func (this *ApiUpLoadController) Prepare() {
 }
 
 var picType = []string{"png", "jpg", "jpeg", "gif", "bmp"}
-var siteConfig = bootstrap.Config()
+
+
 
 func (this *ApiUpLoadController) UpLoadHandle() {
 	//检测是否开启 token 认证
-	if siteConfig.ApiToken != "" {
+	if bootstrap.SiteConfig.ApiToken != "" {
 		//需要进行验证
 		apiToken := this.GetString("token")
-		if apiToken != siteConfig.ApiToken {
+		if apiToken != bootstrap.SiteConfig.ApiToken {
 			this.errorResp(e.ERROR_AUTH_CHECK_TOKEN_FAIL)
 			return
 		}
@@ -39,7 +40,7 @@ func (this *ApiUpLoadController) UpLoadHandle() {
 	if f == nil {
 		this.errorResp(e.ERROR_FILE_IS_EMPTY)
 	}
-	if h.Size > siteConfig.SiteUpLoadMaxSize<<20 {
+	if h.Size > bootstrap.SiteConfig.SiteUpLoadMaxSize<<20 {
 		this.errorResp(e.ERROR_FILE_IS_TOO_LARGE)
 	}
 	defer f.Close()
@@ -92,7 +93,7 @@ func (this *ApiUpLoadController) validate(contentType string, fileName string) b
 
 //错误resp
 func (this *ApiUpLoadController) errorResp(code int) {
-	result := &auxpi.ErrorJson{}
+	result := &auxpi.RespJson{}
 	result.Code = code
 	result.Msg = e.GetMsg(code)
 	this.Data["json"] = result

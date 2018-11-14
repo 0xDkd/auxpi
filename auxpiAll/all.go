@@ -1,6 +1,5 @@
 package auxpi
 
-
 //Config 配置
 type SiteConfig struct {
 	//站点名称
@@ -13,6 +12,12 @@ type SiteConfig struct {
 	SiteUploadMaxNumber int `json:"site_upload_max_number"`
 	//最大图片规格 MB
 	SiteUpLoadMaxSize int64 `json:"site_up_load_max_size"`
+	//是否使用 Mysql,使用 Mysql 后就不会再使用 json 进行配置
+	DbOption DbOption `json:"db_option"`
+	//JWT Token 
+	JwtSecret string `json:"jwt_secret"`
+	//加密所需 Salt
+	AuxpiSalt string `json:"auxpi_salt"`
 	//是否开启 API
 	OpenApiUpLoad bool `json:"open_api_up_load"`
 	//Api token 空为 不设置token
@@ -23,7 +28,6 @@ type SiteConfig struct {
 	CacheConfig bool `json:"cache_config"`
 	//图床储存的一些配置
 	SiteUploadWay UploadConfig `json:"site_upload_way"`
-
 }
 
 type UploadConfig struct {
@@ -35,7 +39,7 @@ type UploadConfig struct {
 	SinaAccount Account `json:"sina_account"`
 	//
 }
- 
+
 type Account struct {
 	//用户名
 	UserName string `json:"user_name"`
@@ -47,12 +51,12 @@ type Account struct {
 	DefultPicSize string `json:"defult_pic_size"`
 }
 
- //SM 图床 json
+//SM 图床 json
 type SmResponse struct {
 	Code string `json:"code"`
 	Data SmData `json:"data"`
 }
- 
+
 type SmData struct {
 	Width     int    `json:"width"`
 	Height    int    `json:"height"`
@@ -67,25 +71,22 @@ type SmData struct {
 	Delete    string `json:"delete"`
 }
 
- //Sina 图床 json
+//Sina 图床 json
 type SinaMsg struct {
 	Code string   `json:"code"`
 	Data SinaData `json:"data"`
 }
 
- 
 type SinaData struct {
 	Count int      `json:"count"`
 	Data  string   `json:"data"`
 	Pics  SinaPics `json:"pics"`
 }
 
- 
 type SinaPics struct {
 	Pic_1 picInfo `json:"pic_1"`
 }
 
- 
 type picInfo struct {
 	Width  int    `json:"width"`
 	Size   int    `json:"size"`
@@ -95,21 +96,32 @@ type picInfo struct {
 	Pid    string `json:"pid"`
 }
 
- //Api & upload Json
+//Api & upload Json
 type ResultJson struct {
 	Code int      `json:"code"`
 	Msg  string   `json:"msg"`
 	Data fileData `json:"data"`
 }
 
- 
 type fileData struct {
 	Name string `json:"name"`
 	Url  string `json:"url"`
 }
 
- 
-type ErrorJson struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
+type RespJson struct {
+	Code int         `json:"code"`
+	Msg  string      `json:"msg"`
+	Data interface{} `json:"data"`
+}
+
+//Db Option
+
+type DbOption struct {
+	UseDb       bool   `json:"use_db"`
+	DbType      string `json:"db_type"`
+	DbHost      string `json:"db_host"`
+	DbName      string `json:"db_name"`
+	DbUser      string `json:"db_user"`
+	DblPass     string `json:"dbl_pass"`
+	TablePrefix string `json:"table_prefix"`
 }

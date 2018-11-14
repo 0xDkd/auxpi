@@ -9,20 +9,15 @@ type PagesController struct {
 	beego.Controller
 }
 
-//获取 config 的配置
-var siteConfig = bootstrap.Config()
-
-
-
 
 func (this *PagesController) IndexShow() {
-	this.Data["siteName"] = siteConfig.SiteName
-	this.Data["siteUrl"] = siteConfig.SiteUrl
-	this.Data["siteFooterText"] = siteConfig.SiteFooter
+	this.Data["siteName"] = bootstrap.SiteConfig.SiteName
+	this.Data["siteUrl"] = bootstrap.SiteConfig.SiteUrl
+	this.Data["siteFooterText"] = bootstrap.SiteConfig.SiteFooter
 	this.Data["apiUrl"] = "/api/v1/auth/upload"
-	this.Data["maxNumber"] = siteConfig.SiteUploadMaxNumber
+	this.Data["maxNumber"] = bootstrap.SiteConfig.SiteUploadMaxNumber
 	//单位为Mb 5mb ==> 5*1024 kb
-	this.Data["maxPicSize"] = siteConfig.SiteUpLoadMaxSize << 10
+	this.Data["maxPicSize"] = bootstrap.SiteConfig.SiteUpLoadMaxSize << 10
 	this.Data["apiSelect"] = "SouGou"
 	this.Data["iconStyle"] = "sougou"
 	this.Data["iconColor"] = "orange"
@@ -38,13 +33,13 @@ func (this *PagesController) IndexShow() {
 
 
 func (this *PagesController) SinaShow() {
-	this.Data["siteName"] = siteConfig.SiteName
-	this.Data["siteUrl"] = siteConfig.SiteUrl
-	this.Data["siteFooterText"] = siteConfig.SiteFooter
+	this.Data["siteName"] = bootstrap.SiteConfig.SiteName
+	this.Data["siteUrl"] = bootstrap.SiteConfig.SiteUrl
+	this.Data["siteFooterText"] = bootstrap.SiteConfig.SiteFooter
 	this.Data["apiUrl"] = "/api/v1/auth/upload/"
-	this.Data["maxNumber"] = siteConfig.SiteUploadMaxNumber
+	this.Data["maxNumber"] = bootstrap.SiteConfig.SiteUploadMaxNumber
 	//单位为Mb 5mb ==> 5*1024 kb
-	this.Data[" maxPicSize"] = siteConfig.SiteUpLoadMaxSize << 10
+	this.Data[" maxPicSize"] = bootstrap.SiteConfig.SiteUpLoadMaxSize << 10
 	this.Data["xsrf_token"] = this.XSRFToken()
 	this.LayoutSections = make(map[string]string)
 	this.Data["apiSelect"] = "Sina"
@@ -56,7 +51,7 @@ func (this *PagesController) SinaShow() {
 	this.LayoutSections["Left"] = "layouts/left.tpl"
 	this.Layout = "layouts/app.tpl"
 	//检测是否开启新浪图床
-	if siteConfig.SiteUploadWay.OpenSinaPicStore {
+	if bootstrap.SiteConfig.SiteUploadWay.OpenSinaPicStore {
 		this.TplName = "webUpload/box.tpl"
 		return
 	}
@@ -65,13 +60,13 @@ func (this *PagesController) SinaShow() {
 
 
 func (this *PagesController) SmmsShow() {
-	this.Data["siteName"] = siteConfig.SiteName
-	this.Data["siteUrl"] = siteConfig.SiteUrl
-	this.Data["siteFooterText"] = siteConfig.SiteFooter
+	this.Data["siteName"] = bootstrap.SiteConfig.SiteName
+	this.Data["siteUrl"] = bootstrap.SiteConfig.SiteUrl
+	this.Data["siteFooterText"] = bootstrap.SiteConfig.SiteFooter
 	this.Data["apiUrl"] = "/api/v1/auth/upload/"
-	this.Data["maxNumber"] = siteConfig.SiteUploadMaxNumber
+	this.Data["maxNumber"] = bootstrap.SiteConfig.SiteUploadMaxNumber
 	//单位为Mb 5mb ==> 5*1024 kb
-	this.Data["maxPicSize"] = siteConfig.SiteUpLoadMaxSize << 10
+	this.Data["maxPicSize"] = bootstrap.SiteConfig.SiteUpLoadMaxSize << 10
 	this.Data["xsrf_token"] = this.XSRFToken()
 	this.LayoutSections = make(map[string]string)
 	this.Data["apiSelect"] = "Smms"
@@ -87,15 +82,15 @@ func (this *PagesController) SmmsShow() {
 }
 
 func (this *PagesController) AboutShow() {
-	this.Data["siteName"] = siteConfig.SiteName
-	this.Data["siteUrl"] = siteConfig.SiteUrl
-	this.Data["siteFooterText"] = siteConfig.SiteFooter
+	this.Data["siteName"] = bootstrap.SiteConfig.SiteName
+	this.Data["siteUrl"] = bootstrap.SiteConfig.SiteUrl
+	this.Data["siteFooterText"] = bootstrap.SiteConfig.SiteFooter
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["Scripts"] = "webUpload/uploadScript.tpl"
 	this.LayoutSections["Header"] = "layouts/header.tpl"
 	this.LayoutSections["Footer"] = "layouts/footer.tpl"
 	this.LayoutSections["Left"] = "layouts/left.tpl"
-	this.Data["title"] = "关于 Buster API 图床"
+	this.Data["title"] = "关于"+bootstrap.SiteConfig.SiteName
 	this.Layout = "layouts/app.tpl"
 	this.TplName = "about/about-me.tpl"
 }

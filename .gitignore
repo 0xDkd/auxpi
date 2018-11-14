@@ -1,6 +1,5 @@
 # Binaries for programs and plugins
 *.exe
-*.exe~
 *.dll
 *.so
 *.dylib
@@ -20,3 +19,6 @@ auxpi.tar.gz
 .idea/*
 .vscode
 .vscode/*
+siteConfig.json
+.lock
+.idea

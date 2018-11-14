@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"github.com/astaxie/beego/cache"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"time"
 )
@@ -15,11 +16,9 @@ type AuxpiConfig struct {
 
 var cCache, _ = cache.NewCache("memory", `{"interval":3600}`)
 
-type JsonStruct struct {
-}
+var SiteConfig *auxpi.SiteConfig
 
-func NewJsonStruct() *JsonStruct {
-	return &JsonStruct{}
+type JsonStruct struct {
 }
 
 func (jst *JsonStruct) Load(filename string, v interface{}) {
@@ -59,6 +58,7 @@ func init() {
 	lockDir := baseDir + "install.lock"
 	_, err := os.Stat(lockDir)
 	if err == nil {
+		SiteConfig = Config()
 		return
 	}
 	if os.IsNotExist(err) {
@@ -70,6 +70,8 @@ func init() {
 		siteconfig.SiteUpLoadMaxSize = 5
 		siteconfig.SiteUploadMaxNumber = 10
 		siteconfig.OpenApiUpLoad = true
+		siteconfig.JwtSecret = GetRandomString(16)
+		siteconfig.AuxpiSalt = GetRandomString(16)
 		siteconfig.ApiToken = ""
 		siteconfig.ApiDefault = "SouGou"
 		siteconfig.CacheConfig = false
@@ -79,7 +81,13 @@ func init() {
 		siteconfig.SiteUploadWay.SinaAccount.PassWord = ""
 		siteconfig.SiteUploadWay.SinaAccount.ResetSinaCookieTime = 3600
 		siteconfig.SiteUploadWay.SinaAccount.DefultPicSize = "large"
-
+		siteconfig.DbOption.UseDb = true
+		siteconfig.DbOption.DbType = "mysql"
+		siteconfig.DbOption.DbHost = "127.0.0.1:3306"
+		siteconfig.DbOption.DbName = "auxpi"
+		siteconfig.DbOption.DbUser = "root"
+		siteconfig.DbOption.DblPass = "root"
+		siteconfig.DbOption.TablePrefix = "auxpi_"
 		configJson, err := siteconfig.MarshalJSON()
 		if err != nil {
 			panic(err)
@@ -93,6 +101,19 @@ func init() {
 		_, err = w.WriteString(string(configJson))
 		w.Flush()
 		f.Close()
+		SiteConfig = Config()
 	}
 
 }
+
+func GetRandomString(l int) string {
+	str := `0123456789abcdef!@#$%^&*()__+ghijklmnop?></qrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`
+	bytes := []byte(str)
+	result := []byte{}
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i := 0; i < l; i++ {
+		result = append(result, bytes[r.Intn(len(bytes))])
+	}
+	return string(result)
+}
+

@@ -14,7 +14,6 @@ type UpLoadTools struct {
 }
 
 var picType = []string{"png", "jpg", "jpeg", "gif", "bmp"}
-var siteConfig = bootstrap.Config()
 //返回不同图床的 URL
 func (this *UpLoadTools) HandleUrl(apiSelect string, f multipart.File, h *multipart.FileHeader) string {
 	imgMime := h.Header.Get("Content-Type")
@@ -28,14 +27,14 @@ func (this *UpLoadTools) HandleUrl(apiSelect string, f multipart.File, h *multip
 	case "SouGou":
 		url = this.UpLoadToSouGou(fileContent)
 	case "Sina":
-		if siteConfig.SiteUploadWay.OpenSinaPicStore == false {
+		if bootstrap.SiteConfig.SiteUploadWay.OpenSinaPicStore == false {
 			url = ""
 		}
 		url = this.UpLoadToSina(fileContent, imgMime)
 	case "Smms":
 		url = this.UpLoatToSmms(fileContent, imgInfo)
 	default:
-		switch siteConfig.ApiDefault {
+		switch bootstrap.SiteConfig.ApiDefault {
 		case "SouGou":
 			url = this.UpLoadToSouGou(fileContent)
 		case "Smms":

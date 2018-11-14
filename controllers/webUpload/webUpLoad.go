@@ -17,7 +17,7 @@ type WebUpLoadController struct {
 }
 
 var picType = []string{"png", "jpg", "jpeg", "gif", "bmp"}
-var siteConfig = bootstrap.Config()
+
 
 //代码冗余，但是使用 API 会造成不必要的消耗
 func (this *WebUpLoadController) UpLoadHandle() {
@@ -34,7 +34,7 @@ func (this *WebUpLoadController) UpLoadHandle() {
 		return
 	}
 	//检测是否超出大小限制
-	if h.Size > siteConfig.SiteUpLoadMaxSize<<20 {
+	if h.Size > bootstrap.SiteConfig.SiteUpLoadMaxSize<<20 {
 		this.errorResp(e.ERROR_FILE_IS_TOO_LARGE)
 		return
 	}
@@ -58,7 +58,7 @@ func (this *WebUpLoadController) UpLoadHandle() {
 
 //错误resp
 func (this *WebUpLoadController) errorResp(code int) {
-	result := &auxpi.ErrorJson{}
+	result := &auxpi.RespJson{}
 	result.Code = code
 	result.Msg = e.GetMsg(code)
 	this.Data["json"] = result

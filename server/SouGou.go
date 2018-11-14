@@ -4,6 +4,7 @@ import (
 	"auxpi/bootstrap"
 	"bytes"
 	"encoding/base64"
+	"github.com/astaxie/beego"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -31,6 +32,7 @@ func (this *SouGou) UpLoadToSouGou(img []byte) string {
 	}
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
+	beego.Alert(string(body))
 	respUrl :=string(body)
 	respUrl = strings.Replace(respUrl,"http","https",-1)
 	return respUrl

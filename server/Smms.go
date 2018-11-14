@@ -3,6 +3,7 @@ package server
 import (
 	"auxpi/auxpiAll"
 	"bytes"
+	"github.com/astaxie/beego"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
@@ -29,6 +30,7 @@ func (this *Smms) UpLoatToSmms(img []byte, imgInfo string) string {
 	defer resp.Body.Close()
 	data, _ := ioutil.ReadAll(resp.Body)
 	sm := auxpi.SmResponse{}
+	beego.Alert(string(data))
 	sm.UnmarshalJSON([]byte(string(data)))
 	return string(sm.Data.Url)
 }

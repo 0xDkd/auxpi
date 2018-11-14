@@ -273,7 +273,7 @@ GOOS=darwin GOARCH=amd64 bee pack
 ```json
 {
     "code": 500,
-    "msg": "上传出错"
+    "msg": "上传失败"
 }
 ```
 
@@ -289,8 +289,8 @@ API 未开启返回值
  
 ```json
 {
-    "code": 20001,
-    "msg": "Token鉴权失败"
+    "code": 403,
+    "msg": "Forbidden"
 }
 ```
 
@@ -299,8 +299,8 @@ API 未开启返回值
 ```json
 
 {
-    "code": 10001,
-    "msg": "上传文件为空"
+    "code": 500,
+    "msg": "No files were uploaded."
 }
 
 ```
@@ -310,8 +310,8 @@ API 未开启返回值
 ```json
 
 {
-    "code": 10002,
-    "msg": "上传文件太大"
+    "code": 500,
+    "msg": "File is too large."
 }
 
 ```
@@ -341,7 +341,7 @@ API 未开启返回值
 
 ## 致敬
 
-[@wisp-x](https://github.com/wisp-x)
+[wisp-x](https://github.com/wisp-x)
 
-[@astaxie](https://github.com/astaxie)
+[astaxie](https://github.com/astaxie)
 
