@@ -56,6 +56,10 @@
 
 使用该图床有两种选择，一种选择是使用 Release 中已经编译好的文件，另外一种选择是自己编译代码。
 
+### 萌新安装教程
+
+请看 [https://0w0.tn/archives/auxpi-install-guide-moe.html](https://0w0.tn/archives/auxpi-install-guide-moe.html)
+
 ### 从 Release 中获取编译完成的文件
 首先需要到 [Release](https://github.com/aimerforreimu/AUXPI/releases) 中下载符合您服务器需要的最新版本的压缩包，然后在您的服务器端进行解压，解压完成以后的目录为 (以 Linux/Mac 系统为例):
 
@@ -341,7 +345,7 @@ API 未开启返回值
 
 ## 致敬
 
-[wisp-x](https://github.com/wisp-x)
+[@wisp-x](https://github.com/wisp-x)
 
-[astaxie](https://github.com/astaxie)
+[@astaxie](https://github.com/astaxie)
 
