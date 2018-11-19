@@ -3,6 +3,7 @@ package v1
 import (
 	"auxpi/bootstrap"
 	"auxpi/controllers/api"
+	"auxpi/controllers/webUpload"
 
 	"github.com/astaxie/beego"
 )
@@ -12,8 +13,7 @@ func RegisterOpenApiV1() {
 	//不需要控制的 api 放到这里
 	ns :=
 		beego.NewNamespace("/api/v1",
-			beego.NSRouter("/web_upload/", &api.ApiUpLoadController{}, "post:UpLoadHandle"),
-
+			beego.NSRouter("/web_upload/", &controllers.WebUpLoadController{}, "post:UpLoadHandle"),
 		)
 	beego.AddNamespace(ns)
 }

@@ -96,6 +96,12 @@ type picInfo struct {
 	Pid    string `json:"pid"`
 }
 
+type SinaError struct {
+	Retcode string `json:"retcode"`
+	Reason string `json:"reason"`
+}
+
+
 //Api & upload Json
 type ResultJson struct {
 	Code int      `json:"code"`
@@ -125,3 +131,17 @@ type DbOption struct {
 	DblPass     string `json:"dbl_pass"`
 	TablePrefix string `json:"table_prefix"`
 }
+
+//User Info Struct
+
+type UserInfo struct {
+	User string `json:"user"`
+	Status string `json:"status"`
+	Code int `json:"code"`
+	Token string `json:"token"`
+	Name string `json:"name"`
+	Avatar string `json:"avatar"`
+	Introduction string `json:"introduction"`
+	Roles []string `json:"roles"`
+	Setting interface{} `json:"setting"`
+} 

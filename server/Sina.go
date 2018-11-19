@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/astaxie/beego/cache"
+	"github.com/astaxie/beego/logs"
 	"hash/crc32"
 	"io/ioutil"
 	"net/http"
@@ -64,6 +65,12 @@ func (this *Sina) getCookies(durl string, data map[string]string) (interface{}) 
 	}
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	resp, err := client.Do(request)
+	body,_ := ioutil.ReadAll(resp.Body)
+	sinaError := &auxpi.SinaError{}
+	sinaError.UnmarshalJSON(body)
+	if sinaError.Retcode == "101" {
+		logs.Alert("新浪图床上传错误:"+sinaError.Reason)
+	}
 	defer resp.Body.Close()
 	cookie := resp.Cookies()
 	//缓存 Cookie 缓存一个小时

@@ -14,11 +14,13 @@ type Auth struct {
 	base.ApiController
 }
 type authInfo struct {
-	Username string `valid:"Required; MaxSize(32)"`
-	Password string `valid:"Required; MaxSize(32)"`
+	Username string `valid:"Required; MaxSize(32)" form:"username"`
+	Password string `valid:"Required; MaxSize(32)" form:"password"`
 }
 
-func (this *Auth) GetAuth() {
+func (this *Auth) GetAuthByUserName() {
+	logs.Alert(this.GetString("username"))
+	logs.Alert(this.GetString("password"))
 	info := authInfo{}
 	code := e.INVALID_PARAMS
 	if err := this.ParseForm(&info); err != nil {
@@ -27,6 +29,7 @@ func (this *Auth) GetAuth() {
 	}
 	valid := validation.Validation{}
 	ok, _ := valid.Valid(&info)
+	logs.Alert(info)
 	data := make(map[string]interface{})
 	if ok {
 		isExist := models.CheckAuth(info.Username, utils.GetSha256CodeWithSalt(info.Password))
@@ -56,4 +59,8 @@ func (this *Auth) GetAuth() {
 	this.Data["json"] = resp
 	this.ServeJSON()
 
+}
+
+func (this *Auth) GetAuthByUserEmail()  {
+	
 }
