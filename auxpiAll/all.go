@@ -1,5 +1,9 @@
 package auxpi
 
+import (
+	"encoding/xml"
+)
+
 //Config 配置
 type SiteConfig struct {
 	//站点名称
@@ -36,11 +40,14 @@ type UploadConfig struct {
 	//是否开启微博图床
 	OpenSinaPicStore bool `json:"open_sina_pic_store"`
 	//Sina Account
-	SinaAccount Account `json:"sina_account"`
-	//
+	SinaAccount SinaAccount `json:"sina_account"`
+	//是否开启 flickr 图床 (此功能该可以在后台开启)
+	OpenFlickrStore bool `json:"open_flickr_store"`
+	//Flickr 配置
+	FlickrAccount FlickrAccount `json:"flickr_account"`
 }
 
-type Account struct {
+type SinaAccount struct {
 	//用户名
 	UserName string `json:"user_name"`
 	//密码
@@ -49,6 +56,36 @@ type Account struct {
 	ResetSinaCookieTime int `json:"reset_sina_cookie_time"`
 	//新浪图床默认使用的尺寸大小 square,thumb150,orj360,orj480,mw690,mw1024,mw2048,small,bmiddle,large 、默认为large
 	DefultPicSize string `json:"defult_pic_size"`
+}
+
+//新浪公共接口，只需要提供 api 地址即可
+//{"code":1,"msg":"操作成功","data":{"code":"200","width":176,"height":254,"size":13476,"pid":"005BYqpgly1fz9xxss19rj372jrq","url":"https:\/\/ws3.sinaimg.cn\/large\/005BYqpgly1fz9xxss19rj304w072jrq.jpg"},"runtime":"0.311697s"} 
+type SinaPublicResponse struct {
+	Code int                    `json:"code"`
+	Msg  string                 `json:"msg"`
+	Data map[string]interface{} `json:"data"`
+}
+
+type FlickrAccount struct {
+	//default size
+	DefaultSize string `json:"default_size"`
+	//api_key
+	Id                 string `json:"id"`
+	Api_key            string `json:"api_key"`
+	Api_secret         string `json:"api_secret"`
+	Oauth_token        string `json:"oauth_token"`
+	Oauth_token_secret string `json:"oauth_token_secret"`
+}
+
+type FlickrGetPicResp struct {
+	XMLName        xml.Name `xml:"photo"`
+	Id             string   `xml:"id,attr"`
+	Secret         string   `xml:"secret,attr"`
+	Server         string   `xml:"server,attr"`
+	Farm           string   `xml:"farm,attr"`
+	Dateuploaded   string   `xml:"dateuploaded,attr"`
+	Originalsecret string   `xml:"originalsecret,attr"`
+	Originalformat string   `xml:"originalformat,attr"`
 }
 
 //SM 图床 json
@@ -98,9 +135,8 @@ type picInfo struct {
 
 type SinaError struct {
 	Retcode string `json:"retcode"`
-	Reason string `json:"reason"`
+	Reason  string `json:"reason"`
 }
-
 
 //Api & upload Json
 type ResultJson struct {
@@ -135,13 +171,74 @@ type DbOption struct {
 //User Info Struct
 
 type UserInfo struct {
-	User string `json:"user"`
-	Status string `json:"status"`
+	User         string      `json:"user"`
+	Status       string      `json:"status"`
+	Code         int         `json:"code"`
+	Token        string      `json:"token"`
+	Name         string      `json:"name"`
+	Avatar       string      `json:"avatar"`
+	Introduction string      `json:"introduction"`
+	Roles        []string    `json:"roles"`
+	Setting      interface{} `json:"setting"`
+}
+
+//文件类型结构体
+type FormFile struct {
+	Name  string //File Name
+	Key   string //File upload Name
+	Value []byte //File Value
+	Type  string //File MIME Type
+}
+
+//百度图片
+type BaiduResp struct {
+	Errorn    int    `json:"errorn"`
+	Url       string `json:"url"`
+	QuerySign string `json:"querySign"`
+	Simid     string `json:"simid"`
+}
+
+//掘金图片
+type JueJinResp struct {
+	//S string `json:"s"`
+	//M string `json:"m"`
+	D interface{} `json:"d"`
+}
+
+//网易图片
+type NetEasyResp struct {
+	Code string   `json:"code"`
+	Data []string `json:"data"`
+}
+
+//Upload.cc
+type CCResp struct {
+	Code         int           `json:"code"`
+	SuccessImage []interface{} `json:"success_image"`
+}
+
+//阿里
+type AliResp struct {
+	FsUrl string `json:"fs_url"`
+	Code  string `json:"code"`
+	Size  string `json:"size"`
+	Width string `json:"width"`
+	Url   string `json:"url"`
+	Hash  string `json:"hash"`
+}
+
+type FakerTable struct {
 	Code int `json:"code"`
-	Token string `json:"token"`
-	Name string `json:"name"`
-	Avatar string `json:"avatar"`
-	Introduction string `json:"introduction"`
-	Roles []string `json:"roles"`
-	Setting interface{} `json:"setting"`
+	Item []map[string]string `json:"item"`
 } 
+
+//Faker Data
+type FakerData struct {
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Author      string `json:"author"`
+	PageViews   int    `json:"page_views"`
+	DisPlayTime string `json:"dis_play_time"`
+}
+
+

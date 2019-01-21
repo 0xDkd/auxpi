@@ -2,8 +2,9 @@ package utils
 
 import (
 	"auxpi/bootstrap"
-	"github.com/dgrijalva/jwt-go"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 var jwtSecret = []byte(bootstrap.SiteConfig.JwtSecret)

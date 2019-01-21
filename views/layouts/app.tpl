@@ -16,6 +16,7 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" href="/static/app/iconfont/iconfont.css">
     <link rel="stylesheet" href="/static/app/newicon/iconfont.css">
+    <link rel="stylesheet" href="/static/app/uploadicon/iconfont.css">
     <link rel="stylesheet" href="/static/mdui/0.4.1/css/mdui.min.css">
     <link rel="stylesheet" href="/static/app/css/app.css">
     <!--[if IE]>
@@ -30,7 +31,7 @@
 {{/*content*/}}
 <div class="mdui-container">
     <main>
-    {{.LayoutContent}}
+        {{.LayoutContent}}
     </main>
 </div>
 {{/*footer*/}}

@@ -21,8 +21,8 @@ type Sina struct {
 
 var picType = []string{"png", "jpg", "jpeg", "gif", "bmp"}
 var memoryCache, _ = cache.NewCache("memory", `{"interval":3600}`)
-//获取 config 的配置
-var siteConfig = bootstrap.Config()
+
+
 
 //新浪图床登录
 func (this *Sina) Login(name string, pass string) interface{} {
@@ -80,7 +80,7 @@ func (this *Sina) getCookies(durl string, data map[string]string) (interface{}) 
 
 //上传图片
 func (this *Sina) UpLoadToSina(img []byte, imgType string) string {
-	if siteConfig.SiteUploadWay.OpenSinaPicStore == false {
+	if bootstrap.SiteConfig.SiteUploadWay.OpenSinaPicStore == false {
 		return ""
 	}
 	durl := "http://picupload.service.weibo.com/interface/pic_upload.php" +
@@ -96,7 +96,7 @@ func (this *Sina) UpLoadToSina(img []byte, imgType string) string {
 	}
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	//设置 cookie
-	uncooikes := this.Login(siteConfig.SiteUploadWay.SinaAccount.UserName, siteConfig.SiteUploadWay.SinaAccount.PassWord)
+	uncooikes := this.Login(bootstrap.SiteConfig.SiteUploadWay.SinaAccount.UserName, bootstrap.SiteConfig.SiteUploadWay.SinaAccount.PassWord)
 	//需要进行断言转换
 	cookies, ok := uncooikes.([]*http.Cookie)
 	if !ok {
@@ -128,7 +128,7 @@ func (this *Sina) getSinaUrl(body []byte, imgType string) string {
 	if rule.MatchString(pid) {
 		sinaNumber := fmt.Sprint((crc32.ChecksumIEEE([]byte(pid)) & 3) + 1)
 		//从配置文件中获取
-		size := siteConfig.SiteUploadWay.SinaAccount.DefultPicSize
+		size := bootstrap.SiteConfig.SiteUploadWay.SinaAccount.DefultPicSize
 		n := len(imgType)
 		rs := []rune(imgType)
 		suffix := string(rs[6:n])

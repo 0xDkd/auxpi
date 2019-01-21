@@ -19,7 +19,7 @@
     });
 
     $("#image").fileinput({
-        uploadUrl: "{{ urlfor "ApiUpLoadController.UpLoadHandle"}}",
+        uploadUrl: "{{ urlfor "WebUpLoadController.UpLoadHandle"}}",
         language: "zh",
         uploadAsync: true,
         overwriteInitial: false,

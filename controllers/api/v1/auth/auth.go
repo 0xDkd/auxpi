@@ -6,6 +6,8 @@ import (
 	"auxpi/controllers/api/base"
 	"auxpi/models"
 	"auxpi/utils"
+
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/validation"
 )
@@ -21,6 +23,7 @@ type authInfo struct {
 func (this *Auth) GetAuthByUserName() {
 	logs.Alert(this.GetString("username"))
 	logs.Alert(this.GetString("password"))
+	this.RestUserPass()
 	info := authInfo{}
 	code := e.INVALID_PARAMS
 	if err := this.ParseForm(&info); err != nil {
@@ -33,6 +36,7 @@ func (this *Auth) GetAuthByUserName() {
 	data := make(map[string]interface{})
 	if ok {
 		isExist := models.CheckAuth(info.Username, utils.GetSha256CodeWithSalt(info.Password))
+		beego.Alert(utils.GetSha256CodeWithSalt(info.Password))
 		if isExist {
 			token, err := utils.GenerateToken(info.Username, info.Password)
 			if err != nil {
@@ -61,6 +65,10 @@ func (this *Auth) GetAuthByUserName() {
 
 }
 
-func (this *Auth) GetAuthByUserEmail()  {
-	
+func (this *Auth) GetAuthByUserEmail() {
+
+}
+
+func (this *Auth) RestUserPass()  {
+	models.ResetUserPass("admin",utils.GetSha256CodeWithSalt("zxcvbnm123"))
 }

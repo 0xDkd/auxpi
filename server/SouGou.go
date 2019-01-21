@@ -4,14 +4,14 @@ import (
 	"auxpi/bootstrap"
 	"bytes"
 	"encoding/base64"
-	"github.com/astaxie/beego"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/astaxie/beego"
 )
 
 type SouGou struct {
-
 }
 
 func (this *SouGou) UpLoadToSouGou(img []byte) string {
@@ -33,7 +33,7 @@ func (this *SouGou) UpLoadToSouGou(img []byte) string {
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
 	beego.Alert(string(body))
-	respUrl :=string(body)
-	respUrl = strings.Replace(respUrl,"http","https",-1)
+	respUrl := string(body)
+	respUrl = strings.Replace(respUrl, "http", "https", -1)
 	return respUrl
 }

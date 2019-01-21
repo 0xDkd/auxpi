@@ -2,6 +2,9 @@ package base
 
 import (
 	"auxpi/auxpiAll"
+	"auxpi/bootstrap"
+	"strconv"
+
 	"github.com/astaxie/beego"
 )
 
@@ -16,19 +19,8 @@ func (this *ApiController) Prepare() {
 
 //跨域Option
 func (c *ApiController) Options() {
-	c.AllowCross() //允许跨域
 	c.Data["json"] = map[string]interface{}{"status": 200, "message": "ok", "moreinfo": ""}
 	c.ServeJSON()
-}
-
-//跨域Allow
-func (c *ApiController) AllowCross() {
-	c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Origin", "http://localhost:9527")       //允许访问源
-	c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS")    //允许post访问
-	c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Headers", "Content-Type,Authorization") //header的类型
-	c.Ctx.ResponseWriter.Header().Set("Access-Control-Max-Age", "1728000")
-	c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Credentials", "true")
-	c.Ctx.ResponseWriter.Header().Set("content-type", "application/json") //返回数据格式是json
 }
 
 //调试 APi 只有 dev 模式下才能使用
@@ -45,7 +37,6 @@ func (this *ApiController) Test() {
 }
 
 func (this *ApiController) LoginTest() {
-	this.AllowCross()
 	data := make(map[string]interface{})
 	//data["_xsrf"] = this.XSRFToken()
 	token := "oasu09w4rsdlkfjasod9fuwer"
@@ -56,5 +47,34 @@ func (this *ApiController) LoginTest() {
 		data,
 	}
 	this.Data["json"] = resp
+	this.ServeJSON()
+}
+
+func (this *ApiController) ShowConf()  {
+	data := &bootstrap.SiteConfig
+	bootstrap.Reload()
+
+	this.Data["json"] =  data
+	this.ServeJSON()
+}
+
+func (this *ApiController) GetFakerTable() {
+	table := &auxpi.FakerTable{}
+	table.Code = 200
+	mdata := make(map[string]string,6)
+	data := make([]map[string]string,10)
+	beego.Alert(data)
+	for i:=0;i<10 ;i++  {
+		mdata["ID"] = strconv.Itoa(i)
+		mdata["title"] = "title"+strconv.Itoa(i)
+		mdata["author"]= "author"+strconv.Itoa(i)
+		mdata["pageviews"]= "pageviews"+strconv.Itoa(i)
+		mdata["status"]= strconv.Itoa(i)
+		mdata["display_time"]= "display_time"+strconv.Itoa(i)
+		data[i] = mdata
+	}
+	table.Item = data
+	this.Data["json"] = table
+
 	this.ServeJSON()
 }

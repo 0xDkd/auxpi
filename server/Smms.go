@@ -2,12 +2,13 @@ package server
 
 import (
 	"auxpi/auxpiAll"
+	"auxpi/tools"
 	"bytes"
-	"github.com/astaxie/beego"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
-	"regexp"
+
+	"github.com/astaxie/beego"
 )
 
 type Smms struct {
@@ -18,10 +19,9 @@ func (this *Smms) UpLoatToSmms(img []byte, imgInfo string) string {
 	body := new(bytes.Buffer)
 	w := multipart.NewWriter(body)
 	content_type := w.FormDataContentType()
-	pat := `filename="(.*)"`
-	res := regexp.MustCompile(pat)
-	name := res.FindAllStringSubmatch(imgInfo, -1)
-	file, _ := w.CreateFormFile("smfile", name[0][1])
+	beego.Alert(imgInfo)
+	name := tools.GetFileNameByMimeType(imgInfo)
+	file, _ := w.CreateFormFile("smfile", name)
 	file.Write(img)
 	w.Close()
 	req, _ := http.NewRequest("POST", "https://sm.ms/api/upload", body)

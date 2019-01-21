@@ -4,8 +4,9 @@ import (
 	"auxpi/auxpiAll"
 	"auxpi/auxpiAll/e"
 	"auxpi/utils"
-	"github.com/astaxie/beego/context"
 	"time"
+
+	"github.com/astaxie/beego/context"
 )
 
 var JWT = func(ctx *context.Context) {
@@ -32,7 +33,7 @@ var JWT = func(ctx *context.Context) {
 			Data: data,
 		}
 		info, _ := errorInfo.MarshalJSON()
-		ctx.Output.Header("Content-Type","application/json; charset=UTF-8")
+		ctx.Output.Header("Content-Type", "application/json; charset=UTF-8")
 		ctx.ResponseWriter.Write(info)
 		return
 	}

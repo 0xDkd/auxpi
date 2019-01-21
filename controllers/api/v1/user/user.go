@@ -1,4 +1,4 @@
-package user
+package userApi
 
 import (
 	"auxpi/auxpiAll"

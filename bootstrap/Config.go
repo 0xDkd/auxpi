@@ -4,11 +4,12 @@ import (
 	"auxpi/auxpiAll"
 	"bufio"
 	"encoding/json"
-	"github.com/astaxie/beego/cache"
 	"io/ioutil"
 	"math/rand"
 	"os"
 	"time"
+
+	"github.com/astaxie/beego/cache"
 )
 
 type AuxpiConfig struct {
@@ -18,10 +19,10 @@ var cCache, _ = cache.NewCache("memory", `{"interval":3600}`)
 
 var SiteConfig *auxpi.SiteConfig
 
-type JsonStruct struct {
+type jsonStruct struct {
 }
 
-func (jst *JsonStruct) Load(filename string, v interface{}) {
+func (jst *jsonStruct) load(filename string, v interface{}) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)
@@ -34,17 +35,17 @@ func (jst *JsonStruct) Load(filename string, v interface{}) {
 }
 
 //返回 Config 里面的 数据
-func Config() *auxpi.SiteConfig {
+func config() *auxpi.SiteConfig {
 	//如果开启了 Config 缓存则尝试从缓存中检索
 	cacheConfig := cCache.Get("SiteConfig")
 	if cacheConfig != nil {
 		config, _ := cacheConfig.(*auxpi.SiteConfig)
 		return config
 	}
-	reader := &JsonStruct{}
+	reader := &jsonStruct{}
 	config := &auxpi.SiteConfig{}
 	configDir := GetPath() + "/conf/siteConfig.json"
-	reader.Load(configDir, config)
+	reader.load(configDir, config)
 	//缓存到内存
 	if config.CacheConfig {
 		cCache.Put("SiteConfig", config, time.Second*3600)
@@ -52,17 +53,32 @@ func Config() *auxpi.SiteConfig {
 	return config
 }
 
+func Reload() {
+	cCache.Delete("SiteConfig")
+	SiteConfig = config()
+}
+
+//Set
+//func Set(key string ,v string)  {
+//	j,_ := bootstrap.SiteConfig.MarshalJSON()
+//	var mj map[string]interface{}
+//	json.Unmarshal(j,&mj)
+//	beego.Alert(&mj)
+//}
+
 //初始化的时候检测是否进行安装，生成对应的 lock 文件,生成配置的 json
 func init() {
 	baseDir := GetPath() + "/conf/"
 	lockDir := baseDir + "install.lock"
 	_, err := os.Stat(lockDir)
 	if err == nil {
-		SiteConfig = Config()
+		SiteConfig = config()
 		return
 	}
 	if os.IsNotExist(err) {
 		var f *os.File
+
+		//Site Init
 		siteconfig := auxpi.SiteConfig{}
 		siteconfig.SiteName = "AuXpI API 图床"
 		siteconfig.SiteUrl = "/"
@@ -75,12 +91,23 @@ func init() {
 		siteconfig.ApiToken = ""
 		siteconfig.ApiDefault = "SouGou"
 		siteconfig.CacheConfig = false
+
+		//upload way Init
 		siteconfig.SiteUploadWay.OpenSinaPicStore = false
 		siteconfig.SiteUploadWay.LocalStore = false
 		siteconfig.SiteUploadWay.SinaAccount.UserName = ""
 		siteconfig.SiteUploadWay.SinaAccount.PassWord = ""
 		siteconfig.SiteUploadWay.SinaAccount.ResetSinaCookieTime = 3600
 		siteconfig.SiteUploadWay.SinaAccount.DefultPicSize = "large"
+
+		//Flickr Init
+		siteconfig.SiteUploadWay.FlickrAccount.Api_key = ""
+		siteconfig.SiteUploadWay.FlickrAccount.Api_secret = ""
+		siteconfig.SiteUploadWay.FlickrAccount.Oauth_token = ""
+		siteconfig.SiteUploadWay.FlickrAccount.Oauth_token_secret = ""
+		siteconfig.SiteUploadWay.FlickrAccount.Id = ""
+
+		//Db Init
 		siteconfig.DbOption.UseDb = true
 		siteconfig.DbOption.DbType = "mysql"
 		siteconfig.DbOption.DbHost = "127.0.0.1:3306"
@@ -101,7 +128,7 @@ func init() {
 		_, err = w.WriteString(string(configJson))
 		w.Flush()
 		f.Close()
-		SiteConfig = Config()
+		SiteConfig = config()
 	}
 
 }
@@ -116,4 +143,3 @@ func GetRandomString(l int) string {
 	}
 	return string(result)
 }
-

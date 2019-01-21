@@ -14,3 +14,8 @@ func CheckAuth(username, password string) bool {
 	}
 	return false
 }
+
+func ResetUserPass(username,password string) bool {
+	db.Model(&Auth{}).Where("username = ?",username).Update("password", password)
+	return true
+}

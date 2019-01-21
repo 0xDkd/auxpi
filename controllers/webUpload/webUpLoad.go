@@ -5,10 +5,11 @@ import (
 	"auxpi/auxpiAll/e"
 	"auxpi/bootstrap"
 	"auxpi/utils"
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 	"log"
 	"strings"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 )
 
 type WebUpLoadController struct {
@@ -17,7 +18,6 @@ type WebUpLoadController struct {
 }
 
 var picType = []string{"png", "jpg", "jpeg", "gif", "bmp"}
-
 
 //代码冗余，但是使用 API 会造成不必要的消耗
 func (this *WebUpLoadController) UpLoadHandle() {
@@ -47,7 +47,7 @@ func (this *WebUpLoadController) UpLoadHandle() {
 			this.succResp(200, url, h.Filename)
 			return
 		}
-		logs.Notice(h.Filename + "上传" + apiSelect + "失败")
+		logs.Notice(h.Filename + "上传 " + apiSelect + " 图床失败")
 		this.errorResp(e.ERROR_CAN_NOT_GET_IMG_URL)
 		return
 	}
