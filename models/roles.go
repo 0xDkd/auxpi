@@ -32,7 +32,7 @@ func CreateRole(role auxpi.RoleJson) bool {
 	return modelsError(auxpi.ErrorToString(err))
 }
 
-func createAdminRole() {
+func CreateAdminRole() {
 	var role = new(Role)
 	role.ID = ROLE_ADMIN
 	role.Name = "admin"
@@ -62,11 +62,9 @@ func MigrateRole() error {
 	if db.HasTable(&Role{}) {
 		err := db.DropTable(&Role{}).Error
 		err = db.CreateTable(&Role{}).Error
-		createAdminRole()
 		return err
 	} else {
 		err := db.CreateTable(&Role{}).Error
-		createAdminRole()
 		return err
 	}
 }

@@ -15,8 +15,8 @@ type Image struct {
 	Link string `gorm:"UNIQUE" json:"link" `
 
 	//属于
-	StoreID int `gorm:"UNIQUE_INDEX" json:"store_id"`
-	UserID  int `gorm:"UNIQUE_INDEX" json:"user_id"`
+	StoreID int `gorm:"INDEX" json:"store_id"`
+	UserID  int `gorm:"INDEX" json:"user_id"`
 
 	//本地，CC ,SM 可以使用
 	Delete string `gorm:"size:255;UNIQUE" json:"delete"`

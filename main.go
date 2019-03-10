@@ -72,6 +72,7 @@ func main() {
 			errs[5] = models.MigratePermissions()
 			errs[6] = models.MigrateOptions()
 			errs[7] = models.MigrateLogs()
+			models.CreateAdminRole()
 			for _, err := range errs {
 				if err != nil {
 					fmt.Println("[ERROR]:" + auxpi.ErrorToString(err))
