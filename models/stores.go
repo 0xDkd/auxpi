@@ -23,26 +23,16 @@ func MigrateStores() error {
 	if db.HasTable(&Store{}) {
 		err := db.DropTable(&Store{}).Error
 		err = db.CreateTable(&Store{}).Error
+		initStores()
 		return err
 	} else {
 		err := db.CreateTable(&Store{}).Error
+		initStores()
 		return err
 	}
 
 }
 
-//
-//func (store *Store) BeforeCreate(scope *gorm.Scope) error {
-//	scope.SetColumn("CreatedOn", time.Now().Unix())
-//
-//	return nil
-//}
-//
-//func (store *Store) BeforeUpdate(scope *gorm.Scope) error {
-//	scope.SetColumn("ModifiedOn", time.Now().Unix())
-//
-//	return nil
-//}
 
 func GetStores() (stores []Store) {
 	db.Model(&Store{}).Find(&stores)
@@ -50,7 +40,7 @@ func GetStores() (stores []Store) {
 }
 
 //初始化储存方案
-func InitStores() {
+func initStores() {
 	s := &Store{}
 	s.Name = "搜狗图床"
 	s.Icon = "sougou"

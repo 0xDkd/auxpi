@@ -12,16 +12,21 @@
           stripe
           style="width: 100%">
           <el-table-column
-            prop="date"
+            prop="created_on"
             label="日期"
             width="180"/>
           <el-table-column
-            prop="name"
+            prop="title"
             label="标题"
             width="180"/>
           <el-table-column
-            prop="address"
+            prop="link"
             label="网址"/>
+          <el-table-column align="center" label="操作">
+            <template slot-scope="scope">
+              <el-butoon type="primary" plain size="mini" @click="jump(scope.row.link)" >点击查看</el-butoon>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
     </div>
@@ -35,7 +40,7 @@ import Mallki from '@/components/TextHoverEffect/Mallki'
 import axios from 'axios'
 
 const a = axios.create({
-  baseURL: 'https://auxpi.0w0.tn',
+  baseURL: 'https://www.0w0.tn',
   timeout: 1000
 })
 
@@ -69,7 +74,7 @@ export default {
   },
   methods: {
     getInfo() {
-      a.get('/msg').then(r => {
+      a.get('/auxpi/message').then(r => {
         this.tableData = r.list
       })
     }

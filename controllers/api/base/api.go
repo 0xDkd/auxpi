@@ -1,7 +1,6 @@
 package base
 
 import (
-	"auxpi/models"
 	"io/ioutil"
 	"net/http"
 
@@ -25,19 +24,4 @@ func (this *ApiController) ProxyImages() {
 	resp.Body.Close()
 	this.Ctx.Output.Header("Content-Type", resp.Header.Get("Content-Type"))
 	this.Ctx.ResponseWriter.Write(data)
-}
-
-//数据库迁移 & 初始化
-func (this *ApiController) CreateUserTable() {
-	models.MigrateUsers()
-	//models.MigrateImages()
-	models.MigrateOptions()
-	models.MigrateStores()
-	models.MigrateSyncImage()
-	models.MigrateRole()
-	models.MigratePermissions()
-	models.MigrateLogs()
-	//初始化
-	models.InitStores()
-	this.ServeJSON()
 }

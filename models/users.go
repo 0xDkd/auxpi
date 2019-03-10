@@ -291,7 +291,7 @@ func RegisterAdmin(u, pass, token, email string) {
 		user.Token = token
 		user.Status = 1
 		user.IsAdmin = true
-		user.Email = ""
+		user.Email = email
 		user.Version = 1
 		user.RoleID = 1
 		db.Create(user)

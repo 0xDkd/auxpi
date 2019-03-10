@@ -145,8 +145,10 @@ func (a *Auth) Store() {
 	}
 
 	//加密密码
+	beego.Alert([]byte(userInfo.Password))
+	beego.Alert(userInfo.Password)
 	userInfo.Password = utils.GetSha256CodeWithSalt(userInfo.Password)
-
+	beego.Alert(userInfo)
 	//通过解析开始查库
 	user, status := models.CheckAndGetUser(userInfo.Email, userInfo.Password)
 	//如果用户确实存在

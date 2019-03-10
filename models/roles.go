@@ -62,6 +62,7 @@ func MigrateRole() error {
 	if db.HasTable(&Role{}) {
 		err := db.DropTable(&Role{}).Error
 		err = db.CreateTable(&Role{}).Error
+		createAdminRole()
 		return err
 	} else {
 		err := db.CreateTable(&Role{}).Error

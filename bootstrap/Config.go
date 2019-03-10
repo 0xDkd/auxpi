@@ -113,8 +113,8 @@ func init() {
 		//Site Init
 		siteconfig := auxpi.SiteConfig{}
 		siteconfig.SiteName = "AuXpI API 图床"
-		siteconfig.SiteUrl = "/"
-		siteconfig.SiteFooter = ""
+		siteconfig.SiteUrl = "http://yoursite.com/"
+		siteconfig.SiteFooter = "新一代图床"
 		siteconfig.Logo = "/static/app/images/logo.jpg"
 		siteconfig.SiteUploadMaxSize = 5
 		siteconfig.SiteUploadMaxNumber = 10

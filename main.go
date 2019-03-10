@@ -19,8 +19,6 @@ func main() {
 	args := os.Args
 	p := "\033[32m"
 	s := "\033[0m"
-	//pr := "\033[31m"
-	beego.Alert(args)
 	if len(args) <= 1 {
 		err := logs.SetLogger(logs.AdapterFile, `{"filename":"auxpi.log","level":7,"maxlines":0,"maxsize":0,"daily":true,"maxdays":10}`)
 		if err != nil {
@@ -36,7 +34,7 @@ func main() {
 		//ERROR 自定义
 		beego.ErrorController(&controllers.ErrorController{})
 		beego.Run()
-	}else {
+	} else {
 		switch args[1] {
 		case "init":
 			if _, err := os.Stat("conf/install.lock"); err == nil {
@@ -84,7 +82,6 @@ func main() {
 		}
 	}
 
-
 }
 
 func formatData() {
@@ -106,20 +103,25 @@ func logo() {
 
 func init() {
 	logo()
-	mod := flag.String("mod", "", "Choose Module")
-	user := flag.String("name", "auxpi-admin", "Admin UserName")
-	password := flag.String("pass", "admin", "Admin Pass")
-	email := flag.String("email", "test@0w0.tn", "Admin Email")
-	p := utils.GetSha256CodeWithSalt(*password)
-	token := flag.String("token", "sakdjo9wasd", "User API Token")
-	t := utils.GetSha256CodeWithSalt(*token)
+	var (
+		mod   string
+		user  string
+		pass  string
+		email string
+	)
+
+	flag.StringVar(&user, "name", "auxpi-admin", "Admin UserName")
+	flag.StringVar(&pass, "pass", "admin-pass", "Admin PassWord")
+	flag.StringVar(&email, "email", "auxpi@0w0.tn", "Admin Email")
+	flag.StringVar(&mod,"mod","","Choose Module")
 	flag.Parse()
-	if *mod != "" {
+	t := utils.GetSha256CodeWithSalt("auxpiauxpi")
+	if mod == "admin" {
 		if u, _ := models.GetUserInfoByID(1); u.ID > 0 {
 			fmt.Println("\033[31m[ERROR]:Admin Is Existed\033[0m")
 			return
 		}
-		models.RegisterAdmin(*user, p, t, *email)
+		models.RegisterAdmin(user, utils.GetSha256CodeWithSalt(pass), t, email)
 		fmt.Println("\033[32m[SUCCESS]:Create Admin SUCCESS\033[0m")
 	}
 }
