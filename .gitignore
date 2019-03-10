@@ -7,8 +7,6 @@ auxpi.tar.gz
 .idea
 .idea/*
 public/upload/*
-static/app/admin/*
-views/admin/*
 *.log
 resource/node_modules
 build/
