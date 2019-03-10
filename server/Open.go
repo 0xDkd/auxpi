@@ -3,6 +3,8 @@ package server
 import (
 	"auxpi/auxpiAll"
 	"auxpi/tools"
+
+	"github.com/astaxie/beego/logs"
 )
 
 type OpenApi struct {
@@ -24,6 +26,7 @@ func (this *OpenApi) UpLoadToPublicSina(img []byte, imgInfo string,imgType strin
 	j.UnmarshalJSON([]byte(data))
 	pid,ok := j.Data["pid"].(string)
 	if !ok {
+		logs.Alert("上传公共图床出错")
 		return ""
 	}
 	url = tools.CheckPid(pid,imgType)

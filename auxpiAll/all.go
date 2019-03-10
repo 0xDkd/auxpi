@@ -2,6 +2,7 @@ package auxpi
 
 import (
 	"encoding/xml"
+	"time"
 )
 
 //Config 配置
@@ -12,14 +13,29 @@ type SiteConfig struct {
 	SiteFooter string `json:"site_footer"`
 	//网站链接
 	SiteUrl string `json:"site_url"`
+	//Logo 地址
+	Logo string `json:"logo"`
 	//最大上传的图片个数
 	SiteUploadMaxNumber int `json:"site_upload_max_number"`
 	//最大图片规格 MB
-	SiteUpLoadMaxSize int64 `json:"site_up_load_max_size"`
+	SiteUploadMaxSize int64 `json:"site_upload_max_size"`
+
+	//是否允许游客上传
+	AllowTourists bool `json:"allow_tourists"`
+
+	//是否开启注册
+	AllowRegister bool `json:"allow_register"`
+	
+	//邮件配置
+	MailConfig MailConfig `json:"mail_config"`
+
+
 	//是否使用 Mysql,使用 Mysql 后就不会再使用 json 进行配置
 	DbOption DbOption `json:"db_option"`
 	//JWT Token 
 	JwtSecret string `json:"jwt_secret"`
+	//Jwt 认证时间
+	JwtDueTime time.Duration `json:"jwt_due_time"`
 	//加密所需 Salt
 	AuxpiSalt string `json:"auxpi_salt"`
 	//是否开启 API
@@ -32,11 +48,13 @@ type SiteConfig struct {
 	CacheConfig bool `json:"cache_config"`
 	//图床储存的一些配置
 	SiteUploadWay UploadConfig `json:"site_upload_way"`
+
+	AuxpiInfo Auxpi `json:"auxpi_info"`
 }
 
 type UploadConfig struct {
 	//TODO:是否开启本地上传
-	LocalStore bool `json:"local_store"`
+	LocalStore LocalStore `json:"local_store"`
 	//是否开启微博图床
 	OpenSinaPicStore bool `json:"open_sina_pic_store"`
 	//Sina Account
@@ -164,7 +182,7 @@ type DbOption struct {
 	DbHost      string `json:"db_host"`
 	DbName      string `json:"db_name"`
 	DbUser      string `json:"db_user"`
-	DblPass     string `json:"dbl_pass"`
+	DbPass      string `json:"db_pass"`
 	TablePrefix string `json:"table_prefix"`
 }
 
@@ -228,9 +246,9 @@ type AliResp struct {
 }
 
 type FakerTable struct {
-	Code int `json:"code"`
+	Code int                 `json:"code"`
 	Item []map[string]string `json:"item"`
-} 
+}
 
 //Faker Data
 type FakerData struct {
@@ -241,4 +259,62 @@ type FakerData struct {
 	DisPlayTime string `json:"dis_play_time"`
 }
 
+//Faker Images Info
 
+type FakerImage struct {
+	Code int           `json:"code"`
+	Msg  string        `json:"msg"`
+	Data []interface{} `json:"data"`
+}
+
+type Auxpi struct {
+	Author       string `json:"author"`
+	Version      string `json:"version"`
+	Branch       string `json:"branch"`
+	Repositories string `json:"repositories"`
+}
+
+type LocalStore struct {
+	Open            bool   `json:"open"`
+	StorageLocation string `json:"storage_location"`
+	Link            string `json:"link"`
+}
+
+type AuxpiCookie struct {
+	UName      string `json:"u_name" valid:"Required"`
+	Email      string `json:"email" valid:"Required;Email;MaxSize(100)"`
+	ID         int    `json:"id" valid:"Required"`
+	Version    string `json:"version" valid:"Required"`
+	AuxpiToken string `json:"auxpi_token" valid:"Required;"`
+}
+
+//Mail Config
+type MailConfig struct {
+	Status bool `json:"status"`
+	Host string `json:"host"`
+	User string `json:"user"`
+	Pass string `json:"pass"`
+	Port string `json:"port"`
+	From string `json:"from"`
+}
+
+//models
+
+//images
+type ImageJson struct {
+	ID      uint   `json:"id"`
+	Name    string `json:"name"`
+	Url     string `json:"url"`
+	UserID  int    `json:"user_id"`
+	StoreID int    `json:"store_id"`
+	Delete  string `json:"delete"`
+	Path    string `json:"path"`
+}
+
+//Role
+type RoleJson struct {
+	Name        string `json:"name"`
+	DisplayName string `json:"display_name"`
+	Description string `json:"description"`
+	PIDs        []uint `json:"pids"`
+}

@@ -1,15 +1,22 @@
-package v1
+package v1Router
 
 import (
 	"auxpi/bootstrap"
-	"auxpi/controllers/api"
-	"auxpi/controllers/webUpload"
+	"auxpi/controllers"
+	"auxpi/controllers/api/v1"
+	"auxpi/middleware"
 
 	"github.com/astaxie/beego"
 )
 
+//上传中间件
+func RegisterUploadMiddleWare()  {
+	beego.InsertFilter("/api/v1/web_upload/",beego.BeforeExec,middleware.CookieUploadControl)
+}
+
+
 //不需要控制的 API
-func RegisterOpenApiV1() {
+func RegisterOpenApi() {
 	//不需要控制的 api 放到这里
 	ns :=
 		beego.NewNamespace("/api/v1",
@@ -18,13 +25,12 @@ func RegisterOpenApiV1() {
 	beego.AddNamespace(ns)
 }
 
-
 //需要控制的 API
-func RegisterControlApiV1()  {
+func RegisterControlApi() {
 	if bootstrap.SiteConfig.OpenApiUpLoad {
-		beego.Router("api/v1/upload", &api.ApiUpLoadController{}, "post:UpLoadHandle")
-		beego.Router("api/v1/upload", &api.ApiUpLoadController{}, "get,put,patch,delete,options,head:ErrorCapture")
+		beego.Router("api/v1/upload", &v1.ApiUpLoadController{}, "post:UpLoadHandle")
+		beego.Router("api/v1/upload", &v1.ApiUpLoadController{}, "get,put,patch,delete,options,head:ErrorCapture")
 	} else {
-		beego.Router("api/v1/upload", &api.ApiUpLoadController{}, "*:ErrorCapture")
+		beego.Router("api/v1/upload", &v1.ApiUpLoadController{}, "*:ErrorCapture")
 	}
 }

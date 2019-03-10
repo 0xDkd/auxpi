@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["27OO"],{"27OO":function(e,t,n){"use strict";n.r(t);var l=n("KHd+"),i=Object(l.a)({},function(){var e=this.$createElement,t=this._self._c||e;return t("div",{staticStyle:{padding:"30px"}},[t("el-alert",{attrs:{closable:!1,title:"menu 2"}})],1)},[],!1,null,null,null);i.options.__file="index.vue";t.default=i.exports}}]);

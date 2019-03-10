@@ -1,13 +1,12 @@
 // @APIVersion 1.0.0
-// @Title File Upload API
+// @Title Auxpi Upload API
 // @Description AuXpI 图床提供的 API 上传的方法
-// @Contact aimerforreimu#gmail.com (#->@)
 package routers
 
 import (
 	"auxpi/controllers"
 	"auxpi/controllers/api/base"
-	"auxpi/controllers/api/v1/auth"
+	"auxpi/controllers/api/v1"
 	"auxpi/middleware"
 	"auxpi/routers/api/auth"
 	"auxpi/routers/api/v1"
@@ -18,46 +17,71 @@ import (
 
 func init() {
 	//正式环境不使用控制器内环境，调试时使用控制器内反射路由
-	beego.Router("/", &page.PagesController{}, "get:IndexShow")
-	beego.Router("/Sina", &page.PagesController{}, "get:SinaShow")
-	beego.Router("/Smms", &page.PagesController{}, "get:SmmsShow")
-	beego.Router("/cc", &page.PagesController{}, "get:CCShow")
-	beego.Router("/Flickr", &page.PagesController{}, "get:FlickrShow")
-	beego.Router("/Baidu", &page.PagesController{}, "get:BaiduShow")
-	beego.Router("/360", &page.PagesController{}, "get:QihooShow")
-	beego.Router("/NetEasy", &page.PagesController{}, "get:NetEasyShow")
-	beego.Router("/Jd", &page.PagesController{}, "get:JdShow")
-	beego.Router("/JueJin", &page.PagesController{}, "get:JueJinShow")
-	beego.Router("/Ali", &page.PagesController{}, "get:AliShow")
-	beego.Router("/Open", &page.PagesController{}, "get:OpenShow")
-	beego.Router("/about", &page.PagesController{}, "get:AboutShow")
+	beego.Router("/", &controllers.PagesController{}, "get:LocalShow")
+	beego.Router("/SouGou", &controllers.PagesController{}, "get:IndexShow")
+	beego.Router("/Sina", &controllers.PagesController{}, "get:SinaShow")
+	beego.Router("/Smms", &controllers.PagesController{}, "get:SmmsShow")
+	beego.Router("/cc", &controllers.PagesController{}, "get:CCShow")
+	beego.Router("/Flickr", &controllers.PagesController{}, "get:FlickrShow")
+	beego.Router("/Baidu", &controllers.PagesController{}, "get:BaiduShow")
+	beego.Router("/360", &controllers.PagesController{}, "get:QihooShow")
+	beego.Router("/NetEasy", &controllers.PagesController{}, "get:NetEasyShow")
+	beego.Router("/Jd", &controllers.PagesController{}, "get:JdShow")
+	beego.Router("/JueJin", &controllers.PagesController{}, "get:JueJinShow")
+	beego.Router("/Ali", &controllers.PagesController{}, "get:AliShow")
+	beego.Router("/Open", &controllers.PagesController{}, "get:OpenShow")
+	beego.Router("/about", &controllers.PagesController{}, "get:AboutShow")
 
 	if beego.BConfig.RunMode == "dev" {
 		//auth
-		auth.RegisterAuth()
+
 		//Vue 调试的时候需要跨域 ()
 		setCors()
 		//部分需要调试的路由
 		testRouter()
 	}
 
+	//全局中间件
+	beego.InsertFilter("*", beego.BeforeRouter, middleware.CookieSignCheck)
 	//v1 版本路由注册
-	v1.RegisterControlApiV1()
-	v1.RegisterOpenApiV1()
+
+	//上传路由
+	v1Router.RegisterControlApi()
+	v1Router.RegisterOpenApi()
+	v1Router.RegisterUploadMiddleWare()
+
+
+	//认证路由
+	AuthRouter.RegisterMiddleWare()
+	AuthRouter.RegisterRouter()
+	AuthRouter.RegisterApi()
+
+	//管理员路由
+	v1Router.RegisterAdminMiddleWare()
+	v1Router.RegisterAdminApi()
+	v1Router.RegisterAdminRouter()
+	//用户路由
+	v1Router.RegisterUserMiddleWare()
+	v1Router.RegisterUserAPi()
+	v1Router.RegisterUserRouter()
+	//websocket
+	v1Router.RegisterWs()
+
+	//UserController
+	v1Router.RegisterUserRouter()
+
+	//测试路由
+	beego.Router("/pic",&v1.Admin{},"get:GetSyncImages")
 	//v2 版本路由注册
 
 }
 
 //测试路由，不要随便开启
 func testRouter() {
-	beego.InsertFilter("/api/v1/test/user_info", beego.BeforeRouter, middleware.JWT)
-	beego.Router("/test", &base.ApiController{}, "post:Test")
-	beego.Router("/auth/login", &base.ApiController{}, "post:LoginTest")
-	//beego.Router("/api/test/info", &user.User{}, "get:GetFakerUserInfo")
-	beego.Router("/conf/", &base.ApiController{}, "get:ShowConf")
-	beego.Router("/api/test/login", &api.Auth{}, "post:GetAuthByUserName")
-	beego.Router("/api/test/table/list", &base.ApiController{}, "get:GetFakerTable")
-
+	//Goroutine 信息
+	//beego.Router("/go/",&base.ApiController{},"get:CPUinfo")
+	beego.Router("/get_auxpi_info",&v1.AuxpiInfo{},"get:GetAuxpiSystemInfo")
+	beego.Router("/get_site_config",&v1.AuxpiInfo{},"get:GetSiteConf")
 }
 
 //跨域设置

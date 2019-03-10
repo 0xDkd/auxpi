@@ -1,5 +1,9 @@
 <div id="menu" class="mdui-drawer mdui-drawer-close">
     <div class="mdui-list" mdui-collapse="{accordion: true}">
+        <a class="mdui-list-item mdui-ripple" href="{{urlfor "PagesController.LocalShow"}}">
+            <i class="mdui-list-item-icon mdui-icon material-icons iconfont icon-auxly mdui-text-color-purple"></i>
+            <div class="mdui-list-item-content">本地图床</div>
+        </a>
         <a class="mdui-list-item mdui-ripple" href="{{urlfor "PagesController.IndexShow"}}">
             <i class="mdui-list-item-icon mdui-icon material-icons iconfont icon-sougou mdui-text-color-orange"></i>
             <div class="mdui-list-item-content">搜狗图床</div>

@@ -25,10 +25,18 @@ func (this *Jd) UploadToJd(img []byte, imgInfo string, imgType string) string {
 	}
 	var header map[string]string
 	data := tools.FormPost(file, url, header)
+	var pre = regexp.MustCompile(`(?m)ERROR`)
 
-	var re = regexp.MustCompile(`(?m)\("(.*")\)`)
-	imgFix := re.FindAllStringSubmatch(data, -1)[0][1]
-	url = "https://img" + strconv.Itoa(rand.Intn(3)+11) + ".360buyimg.com/img/" + imgFix
-	beego.Alert(url)
-	return imgFix
+	if !pre.MatchString(data) {
+		var re = regexp.MustCompile(`(?m)\("(.*)"\)`)
+		beego.Alert(data)
+		imgFix := re.FindAllStringSubmatch(data, -1)[0][1]
+		url = "https://img" + strconv.Itoa(rand.Intn(3)+11) + ".360buyimg.com/img/" + imgFix
+		beego.Alert(url)
+		return url
+	}else {
+		return ""
+	}
+
+	
 }

@@ -14,7 +14,6 @@ import (
 type Flickr struct {
 }
 
-
 func flickrGetOauth() *flickr.FlickrClient {
 	api_key := bootstrap.SiteConfig.SiteUploadWay.FlickrAccount.Api_key
 	api_secret := bootstrap.SiteConfig.SiteUploadWay.FlickrAccount.Api_secret
@@ -45,12 +44,16 @@ func flickrGetPicInfo(id string) string {
 		picUrl := "https://" + "farm" + v.Farm + ".staticflickr.com/" + v.Server + "/" + v.Id + "_" + v.Secret + "_" + bootstrap.SiteConfig.SiteUploadWay.FlickrAccount.DefaultSize + ".jpg"
 		return picUrl
 	} else {
-		picUrl := "https://" + "farm" + v.Farm + ".staticflickr.com/" + v.Server + "/" + v.Id + "_o-" + v.Secret + "_o." + v.Originalformat
+		picUrl := "https://" + "farm" + v.Farm + ".staticflickr.com/" + v.Server + "/" + v.Id + "_o-" + v.Originalsecret + "_o." + v.Originalformat
 		return picUrl
 	}
 }
 
 func (this *Flickr) UploadToFlickr(file io.Reader, fileName string) string {
+	if !bootstrap.SiteConfig.SiteUploadWay.OpenFlickrStore {
+		return ""
+	}
+
 	client := flickrGetOauth()
 	beego.Alert(file)
 	beego.Alert(client)

@@ -84,7 +84,7 @@ func (this *Sina) UpLoadToSina(img []byte, imgType string) string {
 		return ""
 	}
 	durl := "http://picupload.service.weibo.com/interface/pic_upload.php" +
-		"?mime=image%2Fjpeg&data=base64&url=0&markpos=1&logo=&nick=0&marks=1&app=miniblog"
+		"?ori=1&mime=image%2Fjpeg&data=base64&url=0&markpos=1&logo=&nick=0&marks=1&app=miniblog"
 	imgStr := base64.StdEncoding.EncodeToString(img)
 	//构造 http 请求
 	postData := make(url.Values)
