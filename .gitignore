@@ -12,6 +12,7 @@ views/admin/*
 *.log
 resource/node_modules
 build/
+pem/
 
 # Binaries for programs and plugins
 *.exe
