@@ -80,7 +80,8 @@ function install() {
 }
 
 function install_mysql() {
-    wget -c http://mirrors.linuxeye.com/oneinstack-full.tar.gz && tar xzf oneinstack-full.tar.gz && ./oneinstack/install.sh --db_option 3 --dbinstallmethod 1 --dbrootpwd 1s16r74z}
+    wget -c http://mirrors.linuxeye.com/oneinstack-full.tar.gz && tar xzf oneinstack-full.tar.gz && ./oneinstack/install.sh --db_option 3 --dbinstallmethod 1 --dbrootpwd 1s16r74z
+}
 
 function install_nginx() {
     wget -c http://mirrors.linuxeye.com/oneinstack-full.tar.gz && tar xzf oneinstack-full.tar.gz && ./oneinstack/install.sh --nginx_option 1
@@ -101,14 +102,14 @@ case "$action" in
 install)
     install
     ;;
-    nginx)
+nginx)
     install_nginx
     ;;
-    mysql)
+mysql)
     install_mysql
     ;;
     all)
-    install_all
+install_all
     ;;
 help)
     auxpi_help
