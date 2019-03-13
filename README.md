@@ -82,7 +82,7 @@ https://github.com/aimerforreimu/AUXPI/wiki/%E5%9B%BE%E5%BA%8A%E9%85%8D%E7%BD%AE
 
 
 
-演示站点为 [demo](https://imgx.0w0.tn/)
+演示站点为 [https://test.0w0.tn/](https://test.0w0.tn/)
 
 演示站点管理员账户:
 ```text
