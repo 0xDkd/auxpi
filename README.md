@@ -65,7 +65,7 @@
 
 有问题请到 Issue 中提出
 
-
+官方站点为 [AuXpI 图床](https://imgx.0w0.tn/)
 
 
 ## 安装教程
@@ -80,9 +80,9 @@ https://github.com/aimerforreimu/AUXPI/wiki/%E4%B8%80%E9%94%AE%E5%AE%89%E8%A3%85
 
 https://github.com/aimerforreimu/AUXPI/wiki/%E5%9B%BE%E5%BA%8A%E9%85%8D%E7%BD%AE
 
-官方站点为 [AuXpI 图床](https://imgx.0w0.tn/)
 
-演示站点为 [AuXpI 图床](https://imgx.0w0.tn/)
+
+演示站点为 [demo](https://imgx.0w0.tn/)
 
 演示站点管理员账户:
 ```text
