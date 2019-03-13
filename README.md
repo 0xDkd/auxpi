@@ -5,11 +5,14 @@
 
 **基于 API 的简单图床**
 
+
+
 [![GitHub issues](https://img.shields.io/github/issues/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI/issues)
 [![GitHub forks](https://img.shields.io/github/forks/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI/network)
 [![GitHub stars](https://img.shields.io/github/stars/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI/stargazers)
 [![GitHub license](https://img.shields.io/github/license/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI)
 
+本项目使用 beego + vue + element-ui 进行开发
 
 ```text
     _       __  __  ___ _____
@@ -327,3 +330,6 @@ API 未开启返回值
 
 [astaxie](https://github.com/astaxie)
 
+## LICENSE
+
+GNU General Public License v3.0
