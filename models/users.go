@@ -17,7 +17,7 @@ type User struct {
 	Token    string `gorm:"UNIQUE" json:"token"`
 	Version  uint   `json:"version"`
 
-	RoleID uint `gorm:"UNIQUE_INDEX;" json:"role_id"`
+	RoleID uint `gorm:"INDEX;" json:"role_id"`
 	Role   Role `json:"role"`
 
 	Image []Image `json:"images" json:"image"`
