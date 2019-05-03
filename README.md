@@ -42,9 +42,22 @@
 
 ![管理员后台](https://ws3.sinaimg.cn/large/007DFgJwgy1g10eavu2zqj31ha0obdii.jpg)
 
-![用户后台](https://ws3.sinaimg.cn/large/007DFgJwgy1g10ejf74lzj31h70ogtey.jpg)
+![设置](https://ae01.alicdn.com/kf/HTB1w8QeT4jaK1RjSZFA762dLFXaS.png)
+      
 
-![设置页面](https://ws4.sinaimg.cn/large/007DFgJwgy1g10fkgqdsnj30u018cq9x.jpg)
+支持拖拽对首页的菜单进行排序和开关控制
+
+![拖拽](https://ae01.alicdn.com/kf/HTB1aWD3TYvpK1RjSZFq5jcXUVXat.gif)
+
+图片链接按照权重进行异步分发
+
+![分发](https://ae01.alicdn.com/kf/HTB1VljYTYPpK1RjSZFF5ja5PpXam.gif)
+
+首页有几个可视化的图表，方便分析
+
+![首页](https://ae01.alicdn.com/kf/HTB1yTweT4YaK1RjSZFn5ja80pXaq.gif)
+
+
 
 ---
 
@@ -79,6 +92,10 @@ https://github.com/aimerforreimu/AUXPI/wiki/%E5%9B%BE%E5%BA%8A%E9%85%8D%E7%BD%AE
 密码:admin123
 邮箱:auxpi@0w0.tn
 ```
+## 分发原理
+
+![流程图](https://ae01.alicdn.com/kf/HTB1ikH2TY2pK1RjSZFs761NlXXaN.png)
+
 
 ## 开发人员 && 折腾用户
 
