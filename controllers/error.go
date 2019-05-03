@@ -1,7 +1,19 @@
+// Copyright (c) 2019 aimerforreimu. All Rights Reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+//
+//  GNU GENERAL PUBLIC LICENSE
+//                        Version 3, 29 June 2007
+//
+//  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+//  Everyone is permitted to copy and distribute verbatim copies
+// of this license document, but changing it is not allowed.
+//
+// repo: https://github.com/aimerforreimu/auxpi
+
 package controllers
 
 import (
-	"auxpi/bootstrap"
 	"time"
 
 	"github.com/astaxie/beego"
@@ -18,10 +30,10 @@ func (e *ErrorController) commonStyle() {
 	e.Data["xsrf_token"] = e.XSRFToken()
 	e.Layout = "auth/base.tpl"
 	e.TplName = "auth/base.tpl"
-	e.Data["SiteName"] = bootstrap.SiteConfig.SiteName
+	e.Data["SiteName"] = site.SiteName
 	e.Data["Time"] = beego.Date(time.Now(), "Y")
-	e.Data["SiteLink"] = bootstrap.SiteConfig.SiteUrl
-	e.Data["Logo"] = bootstrap.SiteConfig.Logo
+	e.Data["SiteLink"] = site.SiteUrl
+	e.Data["Logo"] = site.Logo
 }
 
 type UserMsg struct {
@@ -41,7 +53,21 @@ func (e *ErrorController) Error404() {
 		AlertContent:  "404 NOT FOUND",
 		ButtonType:    "primary",
 		ButtonContent: "返回首页",
-		Link:          bootstrap.SiteConfig.SiteUrl,
+		Link:          site.SiteUrl,
+	}
+	e.Data["Part"] = "404"
+}
+
+func (e *ErrorController) Error403() {
+	e.commonStyle()
+	e.LayoutSections["Content"] = "auth/msg.tpl"
+	e.Data["action"] = "register"
+	e.Data["Msg"] = &UserMsg{
+		AlertType:     "danger",
+		AlertContent:  "403 Forbidden",
+		ButtonType:    "primary",
+		ButtonContent: "返回首页",
+		Link:          site.SiteUrl,
 	}
 	e.Data["Part"] = "404"
 }
@@ -55,7 +81,7 @@ func (e *ErrorController) Error501() {
 		AlertContent:  "501 SERVER ERROR",
 		ButtonType:    "primary",
 		ButtonContent: "返回首页",
-		Link:          bootstrap.SiteConfig.SiteUrl,
+		Link:          site.SiteUrl,
 	}
 	e.Data["Part"] = "404"
 }

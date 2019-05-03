@@ -1,9 +1,10 @@
 package ws
 
 import (
-	"auxpi/tools"
-	"auxpi/utils"
 	"net/http"
+
+	"github.com/auxpi/tools"
+	"github.com/auxpi/utils"
 
 	"github.com/astaxie/beego"
 	"github.com/gorilla/websocket"
@@ -18,7 +19,6 @@ func (this *WebSocketController) Prepare() {
 }
 
 var clients = make(map[*websocket.Conn]bool)
-
 
 func (this *WebSocketController) Join() {
 	//update
@@ -48,18 +48,17 @@ func (this *WebSocketController) Join() {
 
 	defer ws.Close()
 
-
 	// Message receive loop.
 	var read = make(map[string]string)
 
 	for {
 		err = ws.ReadJSON(&read)
 		if err != nil {
-			beego.Alert("[Json Read Error] :", err,clients)
+			beego.Alert("[Json Read Error] :", err, clients)
 			delete(clients, ws)
-			beego.Alert("Now Client:",clients)
-			err =ws.Close()
-			if err!=nil {
+			beego.Alert("Now Client:", clients)
+			err = ws.Close()
+			if err != nil {
 				beego.Alert(err)
 			}
 			break
@@ -71,7 +70,7 @@ func (this *WebSocketController) Join() {
 
 func handleMessage() {
 	for client := range clients {
-		beego.Alert("当前存在的客户端:",clients)
+		beego.Alert("当前存在的客户端:", clients)
 		for {
 			select {
 			case msg := <-tools.MsgChan:
@@ -80,7 +79,7 @@ func handleMessage() {
 				beego.Alert(clients)
 				if err != nil {
 					beego.Alert(clients)
-					beego.Alert("[Write Error]:",err)
+					beego.Alert("[Write Error]:", err)
 					//client.Close()
 					delete(clients, client)
 					return

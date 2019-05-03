@@ -1,3 +1,16 @@
+// Copyright (c) 2019 aimerforreimu. All Rights Reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+//
+//  GNU GENERAL PUBLIC LICENSE
+//                        Version 3, 29 June 2007
+//
+//  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+//  Everyone is permitted to copy and distribute verbatim copies
+// of this license document, but changing it is not allowed.
+//
+// repo: https://github.com/aimerforreimu/auxpi
+
 package auxpi
 
 import (
@@ -45,21 +58,20 @@ func caller(calldepth int, short bool) string {
 //统一化处理为 并且转为 string 类型
 //[xxxxx] : "xxxxxxxxxxxxxx"  ==>[file:line]
 func ErrorToString(err error, tip ...string) string {
-	if err !=nil {
+	if err != nil {
 		content := fmt.Sprintf("%v", err)
 		prefix := ""
 		if len(tip) != 0 {
 			prefix = "[" + tip[0] + "]"
 		}
-		e:= prefix + content + `  ===>[` + caller(1, false) + "]"
+		e := prefix + content + `  ===>[` + caller(1, false) + "]"
 
 		return e
 	}
 	return ""
 }
 
-func FormatError(err error,tip ...string) (fErr error) {
+func FormatError(err error, tip ...string) (fErr error) {
 	fErr = fmt.Errorf("%v", ErrorToString(err))
 	return
 }
-

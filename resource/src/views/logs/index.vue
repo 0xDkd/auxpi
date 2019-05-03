@@ -58,7 +58,8 @@ export default {
         INFO: 'info',
         ERROR: 'danger',
         NONE: 'success',
-        DEBUG: 'warning'
+        DEBUG: 'primary',
+        WARNING: 'warning'
       }
       return levelMap[level]
     }

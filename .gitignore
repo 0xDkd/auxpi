@@ -10,7 +10,10 @@ public/upload/*
 *.log
 resource/node_modules
 build/
-pem/
+.well-known
+.well-known/*
+*.memprof
+*.pprof
 
 # Binaries for programs and plugins
 *.exe
@@ -20,7 +23,9 @@ pem/
 *.dylib
 *.idea
 *.log
-
+main
+.key
+.crt
 
 # Test binary, build with `go test -c`
 *.test

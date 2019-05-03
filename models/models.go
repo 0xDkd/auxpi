@@ -1,16 +1,17 @@
 package models
 
 import (
-	"auxpi/bootstrap"
 	"fmt"
 	"log"
 	"strings"
 	"time"
 
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
+	"github.com/auxpi/bootstrap"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	//_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 var db *gorm.DB
@@ -29,7 +30,6 @@ type Report struct {
 	Date   string `json:"date"`
 	Number int    `json:"number"`
 }
-
 
 //初始化链接数据库
 func init() {
@@ -62,7 +62,7 @@ func init() {
 
 	//获取表名称
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
-		return tablePrefix + defaultTableName;
+		return tablePrefix + defaultTableName
 	}
 
 	//注册回调
@@ -81,23 +81,22 @@ func init() {
 // updateTimeStampForCreateCallback will set `CreatedOn`, `ModifiedOn` when creating
 func updateTimeStampForCreateCallback(scope *gorm.Scope) {
 	if !scope.HasError() {
-		nowTime := time.Now().Unix()
-		nowDay := beego.Date(time.Now(), "Y-m-d")
+		nowTime := time.Now()
+		nowDay := beego.Date(time.Now(), "Y/m/d")
 		if createTimeField, ok := scope.FieldByName("CreatedOn"); ok {
 			if createTimeField.IsBlank {
-				createTimeField.Set(nowTime)
+				createTimeField.Set(nowTime.Unix())
 			}
 		}
 
 		if modifyTimeField, ok := scope.FieldByName("ModifiedOn"); ok {
 			if modifyTimeField.IsBlank {
-				modifyTimeField.Set(nowTime)
+				modifyTimeField.Set(nowTime.Unix())
 			}
 		}
 
 		if createDay, ok := scope.FieldByName("CreatedDay"); ok {
 			if createDay.IsBlank {
-
 				createDay.Set(nowDay)
 
 			}
@@ -204,8 +203,21 @@ func CloseDB() {
 func modelsError(err string) bool {
 	if err != "" {
 		AddLog("MODEL", err, "SYSTEM", "ERROR")
-		logs.Alert("[Models Error]: ", err)
+		fmt.Println("[Models Error]: ", err)
 		return false
 	}
 	return true
+}
+
+func CreateDB() {
+	db.Exec("CREATE DATABASE IF NOT EXISTS test_for")
+	MigrateUsers()
+	MigrateImages()
+	MigrateSyncImage()
+	MigrateStores()
+	MigrateRole()
+	MigratePermissions()
+	MigrateOptions()
+	MigrateLogs()
+	MigrateDistribution()
 }

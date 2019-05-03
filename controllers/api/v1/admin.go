@@ -1,15 +1,16 @@
 package v1
 
 import (
-	"auxpi/auxpiAll"
-	"auxpi/auxpiAll/e"
-	"auxpi/bootstrap"
-	"auxpi/controllers/api/base"
-	"auxpi/models"
-	"auxpi/tools"
-	"auxpi/utils"
 	"encoding/json"
 	"strconv"
+
+	"github.com/auxpi/auxpiAll"
+	"github.com/auxpi/auxpiAll/e"
+	"github.com/auxpi/bootstrap"
+	"github.com/auxpi/controllers/api/base"
+	"github.com/auxpi/models"
+	"github.com/auxpi/tools"
+	"github.com/auxpi/utils"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
@@ -20,8 +21,8 @@ type Admin struct {
 }
 
 //管理员信息
-func (u *User) GetInfo() {
-	token := u.Ctx.Request.Header.Get("X-Token")
+func (a *Admin) GetInfo() {
+	token := a.Ctx.Request.Header.Get("X-Token")
 	claims, err := utils.ParseToken(token)
 	if err != nil {
 		beego.Alert("Token parsing unsuccessful")
@@ -29,12 +30,12 @@ func (u *User) GetInfo() {
 	}
 	re := models.GetUserInfo(claims.Username)
 
-	u.Data["json"] = &auxpi.RespJson{
+	a.Data["json"] = &auxpi.RespJson{
 		Code: 200,
 		Msg:  e.GetMsg(200),
 		Data: re,
 	}
-	u.ServeJSON()
+	a.ServeJSON()
 }
 
 //重置 & 显示配置
@@ -50,6 +51,12 @@ func (a *Admin) GetImages() {
 	page := a.Input().Get("page")
 	limit := a.Input().Get("limit")
 	storeID := a.Input().Get("type")
+	sort := a.Input().Get("sort")
+	if sort == "+id" {
+		sort = "ASC"
+	} else {
+		sort = "DESC"
+	}
 	intPage, err := strconv.Atoi(page)
 	if err != nil {
 		logs.Alert("The Type of page is not correct")
@@ -66,7 +73,7 @@ func (a *Admin) GetImages() {
 	if intStoreID != 0 {
 		maps["store_id"] = intStoreID
 	}
-	data["list"], data["total"] = models.GetImages(intPage, intLimit, maps)
+	data["list"], data["total"] = models.GetImages(intPage, intLimit, maps, sort)
 	data["msg"] = "数据获取成功"
 	data["code"] = 200
 	a.Data["json"] = data
@@ -324,3 +331,99 @@ func (a *Admin) DeleteUser() {
 	a.ServeJSON()
 	return
 }
+
+//管理菜单
+func (a *Admin) UpdateMenu() {
+	r := auxpi.MenuReceive{}
+	err := r.UnmarshalJSON(a.Ctx.Input.RequestBody)
+	if err != nil {
+		a.Data["json"] = auxpi.RespJson{
+			Code: e.INVALID_PARAMS,
+			Msg:  e.GetMsg(e.INVALID_PARAMS),
+		}
+		a.ServeJSON()
+		return
+	}
+	models.DisableStores(r)
+	models.EnableStores(r)
+	models.RankStores(r)
+
+	a.Data["json"] = auxpi.RespJson{
+		Code: e.SUCCESS,
+		Msg:  e.GetMsg(e.SUCCESS),
+	}
+	a.ServeJSON()
+
+}
+
+//设置各种图床信息
+// /api/v1/admin/update_stores_options/suffix
+func (a *Admin) UpdateStoreOptions() {
+	//根据后缀获取解析
+	suffix := a.Ctx.Input.Param(":suffix")
+	if suffix == "" {
+		a.Data["json"] = auxpi.RespJson{
+			Code: e.INVALID_PARAMS,
+			Msg:  e.GetMsg(e.INVALID_PARAMS),
+		}
+		a.ServeJSON()
+		return
+	}
+	//入库
+	if !models.UpdateOption(suffix, string(a.Ctx.Input.RequestBody), "conf") {
+		a.Data["json"] = auxpi.RespJson{
+			Code: e.INVALID_PARAMS,
+			Msg:  e.GetMsg(e.INVALID_PARAMS),
+		}
+		a.ServeJSON()
+		return
+	}
+
+	a.Data["json"] = auxpi.RespJson{
+		Code: e.SUCCESS,
+		Msg:  e.GetMsg(e.SUCCESS),
+	}
+	a.ServeJSON()
+	return
+
+}
+
+//单独设置某个图床的状态
+// /api/v1/admin/update_store/
+func (a *Admin) UpdateStore() {
+	store := models.Store{}
+	//验证
+	err := json.Unmarshal(a.Ctx.Input.RequestBody, &store)
+	if err != nil {
+		a.Data["json"] = auxpi.RespJson{
+			Code: e.INVALID_PARAMS,
+			Msg:  e.GetMsg(e.INVALID_PARAMS),
+		}
+		a.ServeJSON()
+		return
+	}
+	//验证通过入库
+	if models.UpdateStore(store) {
+		a.Data["json"] = auxpi.RespJson{
+			Code: e.SUCCESS,
+			Msg:  e.GetMsg(e.SUCCESS),
+		}
+		a.ServeJSON()
+		return
+	}
+	a.Data["json"] = auxpi.RespJson{
+		Code: e.INVALID_PARAMS,
+		Msg:  e.GetMsg(e.INVALID_PARAMS),
+	}
+	a.ServeJSON()
+	return
+}
+
+//清空缓存（所有）
+//TODO: 指定 group 清空
+func (a *Admin) ClearCache() {
+	bootstrap.Cache.ClearAll()
+	a.ServeJSON()
+}
+
+//获取 ssl 证书

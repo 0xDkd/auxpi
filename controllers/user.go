@@ -1,13 +1,27 @@
+// Copyright (c) 2019 aimerforreimu. All Rights Reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+//
+//  GNU GENERAL PUBLIC LICENSE
+//                        Version 3, 29 June 2007
+//
+//  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+//  Everyone is permitted to copy and distribute verbatim copies
+// of this license document, but changing it is not allowed.
+//
+// repo: https://github.com/aimerforreimu/auxpi
+
 package controllers
 
 import (
-	"auxpi/auxpiAll"
-	"auxpi/auxpiAll/e"
-	"auxpi/bootstrap"
-	"auxpi/log"
-	"auxpi/models"
-	"auxpi/utils"
 	"strconv"
+
+	"github.com/auxpi/auxpiAll"
+	"github.com/auxpi/auxpiAll/e"
+	"github.com/auxpi/bootstrap"
+	"github.com/auxpi/log"
+	"github.com/auxpi/models"
+	"github.com/auxpi/utils"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/validation"

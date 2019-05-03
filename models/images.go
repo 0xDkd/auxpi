@@ -1,9 +1,10 @@
 package models
 
 import (
-	"auxpi/auxpiAll"
-	"auxpi/bootstrap"
 	"os"
+
+	"github.com/auxpi/auxpiAll"
+	"github.com/auxpi/bootstrap"
 
 	"github.com/astaxie/beego"
 )
@@ -12,17 +13,19 @@ type Image struct {
 	Model
 
 	Name string `json:"name"`
-	Link string `gorm:"UNIQUE" json:"link" `
+	Link string `json:"link" `
 
 	//属于
 	StoreID int `gorm:"INDEX" json:"store_id"`
 	UserID  int `gorm:"INDEX" json:"user_id"`
 
+	IP string `json:"ip"`
+
 	//本地，CC ,SM 可以使用
-	Delete string `gorm:"size:255;UNIQUE" json:"delete"`
+	Delete string `gorm:"size:255;" json:"delete"`
 
 	//本地储存位置 仅本地可用
-	Path string `gorm:"UNIQUE" json:"path"`
+	Path string `json:"path"`
 
 	//获取外键
 	User  User  `json:"user"`
@@ -57,25 +60,29 @@ func GetStoreNameByImageID(id int) string {
 	return s.Name
 }
 
-func GetImages(pageNum int, pageSize int, maps interface{}) (images []Image, count int) {
+func GetImages(pageNum int, pageSize int, maps interface{}, sort string) (images []Image, count int) {
 	db.Preload("User").
 		Preload("Store").
 		Model(&Image{}).
 		Where(maps).
+		Order("`ID` " + sort).
 		Count(&count).
-		Offset(pageNum).Limit(pageSize).
+		Offset(pageNum).
+		Limit(pageSize).
 		Find(&images)
 
 	return
 }
 
-func GetImagesByUserId(pageNum int, pageSize int, id uint) (image []Image, count int) {
+func GetImagesByUserId(pageNum int, pageSize int, maps interface{}, sort string) (image []Image, count int) {
 	err := db.Preload("User").
 		Preload("Store").
 		Model(&Image{}).
-		Where("user_id=?", id).
+		Where(maps).
 		Count(&count).
-		Offset(pageNum).Limit(pageSize).
+		Offset(pageNum).
+		Limit(pageSize).
+		Order("`ID` " + sort).
 		Find(&image).Error
 
 	modelsError(auxpi.ErrorToString(err))
@@ -103,7 +110,7 @@ func GetAllImagesStoreNumber() (result []AllImageStore) {
 func GetAllImagesReport() (report []Report) {
 	err := db.Model(&Image{}).
 		Select("COUNT(*) AS `number` , created_day AS `date`").
-		Order("`created_day`").
+		Order("`created_day` DESC").
 		Group("`created_day`").
 		Limit(7).
 		Scan(&report).Error
@@ -117,7 +124,7 @@ func GetLocalImageReport() (report []Report) {
 	err := db.Model(&Image{}).
 		Select("COUNT(*) AS `number` , created_day AS `date`").
 		Where("store_id=?", 12).
-		Order("`created_day` ASC ").
+		Order("`created_day` DESC ").
 		Group("`created_day`").
 		Limit(7).
 		Scan(&report).Error
@@ -158,12 +165,10 @@ func DelImages(ids []int) error {
 }
 
 func MigrateImages() error {
-	if db.HasTable(&Image{}) {
-		err :=db.DropTable(&Image{}).Error
-		err = db.CreateTable(&Image{}).Error
-		return err
-	} else {
-		err :=db.CreateTable(&Image{}).Error
+	err := db.DropTableIfExists(&Image{}).Error
+	if err != nil {
 		return err
 	}
+	err = db.CreateTable(&Image{}).Error
+	return err
 }

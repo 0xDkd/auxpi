@@ -1,9 +1,10 @@
 package v1Router
 
 import (
-	"auxpi/controllers"
-	"auxpi/controllers/api/v1"
-	"auxpi/middleware"
+	"github.com/auxpi/controllers"
+	"github.com/auxpi/controllers/api/v1"
+	v2 "github.com/auxpi/controllers/api/v2"
+	"github.com/auxpi/middleware"
 
 	"github.com/astaxie/beego"
 )
@@ -30,7 +31,6 @@ import (
 //	beego.Router("/api/test/images/sync", &v1.Admin{}, "post:SyncImages")
 
 //TODO :改到用户 api 里面去
-
 
 //注册后台所需的中间件
 func RegisterAdminMiddleWare() {
@@ -66,19 +66,29 @@ func RegisterAdminApi() {
 		//获取所有日志
 		beego.NSRouter("/get_logs_list", &v1.Admin{}, "get:LogList"),
 		//获取程序运行信息
-		beego.NSRouter("/get_auxpi_info",&v1.AuxpiInfo{},"get:GetAuxpiSystemInfo"),
+		beego.NSRouter("/get_auxpi_info", &v1.AuxpiInfo{}, "get:GetAuxpiSystemInfo"),
 		//获取 RSA key
-		beego.NSRouter("/get_rsa_key",&v1.AuxpiInfo{},"get:GetRsaKey"),
+		beego.NSRouter("/get_rsa_key", &v1.AuxpiInfo{}, "get:GetRsaKey"),
 		//获取配置
-		beego.NSRouter("/get_site_config",&v1.AuxpiInfo{},"get:GetSiteConf"),
+		beego.NSRouter("/get_site_config", &v1.AuxpiInfo{}, "get:GetSiteConf"),
 		//更新配置
-		beego.NSRouter("/update_site_config",&v1.AuxpiInfo{},"post:ResetSiteConf"),
+		beego.NSRouter("/update_site_config", &v1.AuxpiInfo{}, "post:ResetSiteConf"),
+		//更新菜单
+		beego.NSRouter("/update_menu", &v1.Admin{}, "post:UpdateMenu"),
+		//更新图床配置
+		beego.NSRouter("/update_stores_options/:suffix([a-zA-Z]+)", &v1.Admin{}, "post:UpdateStoreOptions"),
+		//单独更新 Store 信息
+		beego.NSRouter("/update_store", &v1.Admin{}, "post:UpdateStore"),
+		beego.NSRouter("/get_dispatch_list", &v2.DispatchController{}, "get:ShowList"),
+
 		//重置 RSA
 		//beego.NSRouter("/reset_rsa_key",&v1.AuxpiInfo{},"post:RsaReset"),
 		//删除用户
-		beego.NSRouter("/delete_user",&v1.Admin{},"post:DeleteUser"),
-		beego.NSRouter("/get_sync_images",&v1.Admin{},"get:GetSyncImages"),
-		beego.NSRouter("/del_sync_images",&v1.Admin{},"post:DelSyncImages"),
+		beego.NSRouter("/delete_user", &v1.Admin{}, "post:DeleteUser"),
+		beego.NSRouter("/get_sync_images", &v1.Admin{}, "get:GetSyncImages"),
+		beego.NSRouter("/del_sync_images", &v1.Admin{}, "post:DelSyncImages"),
+
+
 	)
 	//管理员登入
 	beego.AddNamespace(ns)

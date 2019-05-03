@@ -1,16 +1,17 @@
 package v1
 
 import (
-	"auxpi/auxpiAll"
-	"auxpi/auxpiAll/e"
-	"auxpi/bootstrap"
-	"auxpi/controllers/api/base"
-	"auxpi/log"
-	"auxpi/utils"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/auxpi/auxpiAll"
+	"github.com/auxpi/auxpiAll/e"
+	"github.com/auxpi/bootstrap"
+	"github.com/auxpi/controllers/api/base"
+	"github.com/auxpi/log"
+	"github.com/auxpi/utils"
 
 	"github.com/astaxie/beego/toolbox"
 )

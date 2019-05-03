@@ -1,9 +1,9 @@
 package v1Router
 
 import (
-	"auxpi/controllers"
-	"auxpi/controllers/api/v1"
-	"auxpi/middleware"
+	"github.com/auxpi/controllers"
+	"github.com/auxpi/controllers/api/v1"
+	"github.com/auxpi/middleware"
 
 	"github.com/astaxie/beego"
 )

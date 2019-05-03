@@ -38,13 +38,6 @@
       </el-col>
     </el-row>
 
-    <!-- <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>GoRoutines</span>
-      </div>
-      <div v-html="goroutines"/>
-    </el-card> -->
-
   </div>
 </template>
 
@@ -92,8 +85,13 @@ export default {
       heap: '',
       goroutines: '',
       gc: '',
-      thread: ''
-
+      thread: '',
+      dialogImageUrl: '',
+      dialogVisible: false,
+      testArr: [],
+      showtext: false,
+      sortfile: [],
+      activeName: 'card'
     }
   },
   created() {
@@ -118,8 +116,8 @@ export default {
           this.userReport[i] = e.number
           this.usersReportCount += e.number
         })
-        chartYData.userReport = this.userReport
-        chartXData.userReport = this.userTime
+        chartYData.userReport = this.userReport.reverse()
+        chartXData.userReport = this.userTime.reverse()
       })
 
       const actionApi = getApiSevenReport().then(resp => {
@@ -128,8 +126,8 @@ export default {
           this.apiReport[i] = e.number
           this.apiReportCount += e.number
         })
-        chartYData.apiReport = this.apiReport
-        chartXData.apiReport = this.apiTime
+        chartYData.apiReport = this.apiReport.reverse()
+        chartXData.apiReport = this.apiTime.reverse()
       })
 
       const actionAllImage = getAllImageSevenReport().then(resp => {
@@ -138,8 +136,8 @@ export default {
           this.allImageReport[i] = e.number
           this.allImagesReportCount += e.number
         })
-        chartYData.allImageReport = this.allImageReport
-        chartXData.allImageReport = this.allImageTime
+        chartYData.allImageReport = this.allImageReport.reverse()
+        chartXData.allImageReport = this.allImageTime.reverse()
       })
 
       const actionLocalImage = getLocalImageSevenReport().then(resp => {
@@ -148,8 +146,8 @@ export default {
           this.localImageReport[i] = e.number
           this.localImagesReportCount += e.number
         })
-        chartYData.localImageReport = this.localImageReport
-        chartXData.localImageReport = this.localImageTime
+        chartYData.localImageReport = this.localImageReport.reverse()
+        chartXData.localImageReport = this.localImageTime.reverse()
       })
 
       Promise.all([actionUser, actionApi, actionAllImage, actionLocalImage]).then(() => {
@@ -163,7 +161,28 @@ export default {
 
         this.lineLoading = false
       })
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    handleUploadSuccess(resp, file, fileList) {
+      this.testArr.push({ 'url': resp.data.url, 'file': file.url })
+      this.sortfile = fileList
+    },
+    sortUploadLink() {
+      this.testArr = []
+      this.sortfile.forEach((element, index) => {
+        this.testArr[index] = { 'url': element.response.data.url, 'file': element.url }
+      })
+    },
+    handleClick(tab, event) {
+      console.log(tab, event)
     }
+
     // getAuxpiInfo() {
     //   getAuxpiSystemInfo().then((resp) => {
     //     this.goroutines = resp.data.goroutines
@@ -191,4 +210,25 @@ export default {
 .lineDiv{
   height: 120px;
 }
+.pre-scrollable {
+	max-height: 340px;
+	overflow-y: scroll;
+}
+pre {
+	display: block;
+	line-height: 1.38461538;
+	color: #333;
+	word-break: break-all;
+	word-wrap: break-word;
+	background-color: #f5f5f5;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+  text-align: center;
+  min-height: 100px;
+}
+.image {
+    width: 100%;
+    height: 230px;
+    display: block;
+  }
 </style>

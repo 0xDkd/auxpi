@@ -12,6 +12,13 @@
               :label="item.name"
               :value="item.id"/>
           </el-select>
+          <el-select v-model="sort" placeholder="排列顺序" size="mini" style="margin-left:40px;" @change="changeOrderBy(selectValue)" >
+            <el-option
+              v-for="i in orderBy"
+              :key="i.value"
+              :label="i.info"
+              :value="i.value"/>
+          </el-select>
           <el-dropdown size="mini" trigger="click" split-button type="primary" style="margin-left:40px;">
             操作
             <el-dropdown-menu slot="dropdown">
@@ -63,12 +70,14 @@
         <el-checkbox-group v-model="checkedImages" @change="handleCheckedImageChange">
           <el-col v-for="(item,index) in imgLists" :xs="12" :sm="6" :md="4" :lg="4" :xl="4" :key="item.id" style="padding:0px 5px 10px;">
             <el-card :body-style="{ padding: '0px'}" shadow="hover" >
-              <div :style="{backgroundImage:'url(' + item.link + ')' ,backgroundRepeat:'no-repeat', backgroundPosition:'center top'}" class="image" />
+              <div :style="{backgroundImage:'url(' + item.link + ')' ,backgroundRepeat:'no-repeat', backgroundPosition:'center center', backgroundSize: 'contain'}" class="image" />
               <div style="padding: 14px;">
                 <div class="bottom clearfix">
                   <el-row style="margin-top:2px;">
                     <el-button type="primary" icon="el-icon-info" plain size="mini" @click="showSingleInfo(item)"/>
+
                     <el-button type="info" icon="el-icon-zoom-in" plain size="mini" @click="zoom(item.link)"/>
+
                     <el-button type="danger" icon="el-icon-delete" plain size="mini" @click="deleteImg(index,item.id)"/>
                     <el-checkbox :key="index" :label="item" style="margin-left:20px" >&nbsp;</el-checkbox>
                   </el-row>
@@ -180,8 +189,8 @@
     </el-dialog>
 
     <!-- 看大图 -->
-    <el-dialog :visible.sync="imageDialog" :fullscreen="true" title="图片原图">
-      <img :src="dialogLink">
+    <el-dialog :visible.sync="imageDialog" title="图片原图">
+      <img :src="dialogLink" width="100%" alt="">
     </el-dialog>
 
     <!-- 单个图片信息 -->
@@ -193,7 +202,7 @@
             <div style="padding: 14px;">
 
               <el-button :data-clipboard-text="info.link" type="success" size="medium" class="tag-read" plain round @click="copy">复制链接</el-button>
-              <el-button size="medium" plain round @click="zoom(info.link)">查看原图</el-button>
+              <el-button size="medium" plain round @click="zoom(info.link,this)">查看原图</el-button>
               <el-button size="medium" type="warning" plain round @click="jump(info.link)">新窗口查看</el-button>
           </div></el-card>
         </el-col>
@@ -242,7 +251,7 @@ export default {
         page: 1,
         limit: 18,
         type: 0,
-        sort: '+id'
+        sort: '-id'
       },
       total: 0,
       mainLoading: false,
@@ -274,7 +283,13 @@ export default {
       user: '',
       uid: 0,
       showUser: false,
-      model: 'edit'
+      model: 'edit',
+      orderBy: [
+        { info: '时间升序', value: '+id' },
+        { info: '时间降序', value: '-id' }
+      ],
+      sort: '-id',
+      imgs: []
     }
   },
   created() {
@@ -305,7 +320,6 @@ export default {
       this.dialogLink = ''
       this.dialogLink = url
       this.imageDialog = true
-      // window.open(url)
     },
     jump(url) {
       window.open(url)
@@ -569,6 +583,10 @@ export default {
       setTimeout(() => {
         this.$router.push({ name: 'usersInfoView', params: { id: this.uid }})
       }, 100)
+    },
+    changeOrderBy(v) {
+      this.listQuery.sort = this.sort
+      this.imgLists = this.getList()
     }
   }
 }

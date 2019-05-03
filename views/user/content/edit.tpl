@@ -4,14 +4,14 @@
             <!-- 卡片头部，包含头像、标题、副标题 -->
 
             <div class="mdui-card-header">
-                <img class="mdui-card-header-avatar" src="https://ws3.sinaimg.cn/large/5d821655ly1g0y2bmcsfxj207g07gt90.jpg"/>
+                <img class="mdui-card-header-avatar" src="https://images.weserv.nl/?url=https://ws3.sinaimg.cn/large/5d821655ly1g0y2bmcsfxj207g07gt90.jpg"/>
                 <div class="mdui-card-header-title">{{ .User.Username}}</div>
                 <div class="mdui-card-header-subtitle">注册于 {{ .User.CreatedDay }}</div>
             </div>
 
             <!-- 卡片的媒体内容，可以包含图片、视频等媒体内容，以及标题、副标题 -->
             <div class="mdui-card-media">
-                <img src="https://ws3.sinaimg.cn/large/5d821655ly1g0y2bq08jbj20ia0bdaal.jpg"/>
+                <img src="https://images.weserv.nl/?url=https://ws3.sinaimg.cn/large/5d821655ly1g0y2bq08jbj20ia0bdaal.jpg"/>
             </div>
 
 

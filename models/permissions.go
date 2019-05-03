@@ -1,7 +1,7 @@
 package models
 
 import (
-	"auxpi/auxpiAll"
+	"github.com/auxpi/auxpiAll"
 
 	"github.com/astaxie/beego/logs"
 )
@@ -69,7 +69,7 @@ func createAdminPermissions() {
 
 func MigratePermissions() error {
 	if db.HasTable(&Permission{}) {
-		err :=db.DropTable(&Permission{}).Error
+		err := db.DropTable(&Permission{}).Error
 		err = db.CreateTable(&Permission{}).Error
 		createAdminPermissions()
 		return err

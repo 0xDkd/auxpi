@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"auxpi/bootstrap"
 	"bytes"
 	"crypto"
 	"crypto/md5"
@@ -20,6 +19,8 @@ import (
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/auxpi/bootstrap"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
@@ -246,5 +247,3 @@ func GetRsaKey() ([]byte, []byte) {
 	pb, pv, _ := autoCreate()
 	return pb, pv
 }
-
-

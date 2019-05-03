@@ -1,13 +1,13 @@
 package AuthRouter
 
 import (
-	"auxpi/controllers/api/v1"
-	"auxpi/middleware"
+	"github.com/auxpi/controllers/api/v1"
+	"github.com/auxpi/middleware"
 
 	"github.com/astaxie/beego"
 )
 
-func RegisterMiddleWare()  {
+func RegisterMiddleWare() {
 	//登录用户中间件 =>已登录重定向
 	beego.InsertFilter("/login", beego.BeforeExec, middleware.CookieAuthedCheck)
 	//重置密码中间件 =>已登录重定向
@@ -20,20 +20,19 @@ func RegisterMiddleWare()  {
 	beego.InsertFilter("/logout", beego.BeforeExec, middleware.CookieAuthCheck)
 }
 
-
 //登录所使用的 api ，所有 api 都是无状态的
 func RegisterApi() {
 	ns :=
 		beego.NewNamespace("/api/v1/auth",
 			beego.NSRouter("/login", &v1.Auth{}, "post:GetAuthByUserName"),
-			beego.NSRouter("/info", &v1.User{}, "get:GetInfo"),
-			beego.NSRouter("/logout", &v1.User{}, "post:GetInfo"),
+			beego.NSRouter("/info", &v1.Admin{}, "get:GetInfo"),
+			beego.NSRouter("/logout", &v1.Auth{}, "post:Destroy"),
 		)
 	beego.AddNamespace(ns)
 }
 
 //登录所使用的路由
-func RegisterRouter()  {
+func RegisterRouter() {
 	//登录
 	beego.Router("/login", &v1.Auth{}, "get:Show")
 	beego.Router("/login", &v1.Auth{}, "post:Store")
@@ -50,8 +49,5 @@ func RegisterRouter()  {
 	//信息页
 	beego.Router("/msg", &v1.Auth{}, "get:Msg")
 	//登出
-	beego.Router("/logout", &v1.Auth{}, "get:Destory")
+	beego.Router("/logout", &v1.Auth{}, "get:Destroy")
 }
-
-
-

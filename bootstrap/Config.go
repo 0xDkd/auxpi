@@ -1,22 +1,44 @@
+// Copyright (c) 2019 aimerforreimu. All Rights Reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+//
+//  GNU GENERAL PUBLIC LICENSE
+//                        Version 3, 29 June 2007
+//
+//  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+//  Everyone is permitted to copy and distribute verbatim copies
+// of this license document, but changing it is not allowed.
+//
+// repo: https://github.com/aimerforreimu/auxpi
+
 package bootstrap
 
 import (
-	"auxpi/auxpiAll"
 	"bufio"
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"strings"
 	"time"
 
+	"github.com/auxpi/auxpiAll"
+
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/cache"
+	_ "github.com/astaxie/beego/cache/memcache"
+	_ "github.com/astaxie/beego/cache/redis"
 )
 
 type AuxpiConfig struct {
 }
 
-var cCache, _ = cache.NewCache("memory", `{"interval":3600}`)
+var Cache = initCache()
+//var Cache, _ = cache.NewCache("memory", `{"interval":60}`)
 
 var SiteConfig *auxpi.SiteConfig
+var InitConfig auxpi.SiteConfig
+
+var Site auxpi.SiteBase
 
 type jsonStruct struct {
 }
@@ -36,7 +58,7 @@ func (jst *jsonStruct) load(filename string, v interface{}) {
 //返回 Config 里面的 数据
 func config() *auxpi.SiteConfig {
 	//如果开启了 Config 缓存则尝试从缓存中检索
-	cacheConfig := cCache.Get("SiteConfig")
+	cacheConfig := Cache.Get("SiteConfig")
 	if cacheConfig != nil {
 		config, _ := cacheConfig.(*auxpi.SiteConfig)
 		return config
@@ -47,7 +69,7 @@ func config() *auxpi.SiteConfig {
 	reader.load(configDir, config)
 	//缓存到内存
 	if config.CacheConfig {
-		cCache.Put("SiteConfig", config, time.Second*3600)
+		Cache.Put("SiteConfig", config, time.Second*3600)
 	}
 	return config
 
@@ -55,7 +77,7 @@ func config() *auxpi.SiteConfig {
 
 //配置重新载入内存
 func Reload() {
-	cCache.Delete("SiteConfig")
+	Cache.Delete("SiteConfig")
 	SiteConfig = config()
 }
 
@@ -78,7 +100,6 @@ func ReGenerate() {
 }
 
 //传入并且重新生成
-
 func ReGenerateByInput(siteConfig auxpi.SiteConfig) error {
 	configJson, err := siteConfig.MarshalJSON()
 	if err != nil {
@@ -91,6 +112,9 @@ func ReGenerateByInput(siteConfig auxpi.SiteConfig) error {
 	f, err = os.Create(configDir)
 	w := bufio.NewWriter(f)
 	_, err = w.WriteString(string(configJson))
+	if err != nil {
+		beego.Alert(err)
+	}
 	w.Flush()
 	f.Close()
 	Reload()
@@ -118,7 +142,6 @@ func init() {
 		siteconfig.Logo = "/static/app/images/logo.jpg"
 		siteconfig.SiteUploadMaxSize = 5
 		siteconfig.SiteUploadMaxNumber = 10
-		siteconfig.OpenApiUpLoad = true
 
 		//JWT
 		siteconfig.JwtSecret = GetRandomString(16, ramdomString)
@@ -126,18 +149,17 @@ func init() {
 		siteconfig.JwtDueTime = 3
 		siteconfig.AuxpiSalt = GetRandomString(16, ramdomString)
 
-		siteconfig.ApiToken = ""
 		siteconfig.ApiDefault = "SouGou"
 		siteconfig.CacheConfig = false
 
 		//upload way Init
 		//本地储存
-		siteconfig.SiteUploadWay.LocalStore.Open = true
+		siteconfig.SiteUploadWay.LocalStore.Status = true
 		siteconfig.SiteUploadWay.LocalStore.Link = "/images"
 		siteconfig.SiteUploadWay.LocalStore.StorageLocation = "public/upload"
 
 		//新浪图床配置
-		siteconfig.SiteUploadWay.OpenSinaPicStore = false
+		siteconfig.SiteUploadWay.SinaAccount.Status = false
 		siteconfig.SiteUploadWay.SinaAccount.UserName = ""
 		siteconfig.SiteUploadWay.SinaAccount.PassWord = ""
 		siteconfig.SiteUploadWay.SinaAccount.ResetSinaCookieTime = 3600
@@ -182,4 +204,50 @@ func init() {
 		SiteConfig = config()
 	}
 
+}
+
+func initCache() cache.Cache {
+	driver := beego.AppConfig.String("drive")
+	driver = strings.ToLower(driver)
+	switch driver {
+	case "redis":
+		c, err := cache.NewCache("redis", `{"key":"`+
+			beego.AppConfig.String("redisCollection")+`","conn":":`+
+			beego.AppConfig.String("redisPort")+`","dbNum":"0","password":"`+
+			beego.AppConfig.String("redisPassword")+`"}`)
+		if err != nil {
+			panic(err)
+		}
+		return c
+	case "memcache":
+		c, err := cache.NewCache("memcache", `{"conn":"`+
+			beego.AppConfig.String("memcacheConn")+`"}`)
+		if err != nil {
+			panic(err)
+		}
+		return c
+	case "memory":
+		c, err := cache.NewCache("memory", `{"interval":60}`)
+		if err != nil {
+			panic(err)
+		}
+		return c
+	case "file":
+		c, err := cache.NewCache("file", `{"CachePath":"`+
+			beego.AppConfig.String("cachePath")+`","FileSuffix":"`+
+			beego.AppConfig.String("fileSuffix")+`","DirectoryLevel":"`+
+			beego.AppConfig.String("directoryLevel")+`","EmbedExpiry":"`+
+			beego.AppConfig.String("EmbedExpiry")+`"}`)
+		if err != nil {
+			panic(err)
+		}
+		return c
+	default:
+		c, err := cache.NewCache("memory", `{"interval":60}`)
+		if err != nil {
+			panic(err)
+		}
+		return c
+		
+	}
 }

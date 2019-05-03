@@ -84,7 +84,7 @@ export default {
         calculable: true,
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: '图片占比详情',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 95],

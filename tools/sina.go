@@ -1,22 +1,35 @@
+// Copyright (c) 2019 aimerforreimu. All Rights Reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+//
+//  GNU GENERAL PUBLIC LICENSE
+//                        Version 3, 29 June 2007
+//
+//  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+//  Everyone is permitted to copy and distribute verbatim copies
+// of this license document, but changing it is not allowed.
+//
+// repo: https://github.com/aimerforreimu/auxpi
+
 package tools
 
 import (
-	"auxpi/bootstrap"
 	"fmt"
 	"hash/crc32"
 )
 
-func CheckPid(pid string,imgType string) string {
+func CheckPid(pid string, imgType string, size string) string {
+	if pid == "" {
+		return ""
+	}
 	sinaNumber := fmt.Sprint((crc32.ChecksumIEEE([]byte(pid)) & 3) + 1)
-	//从配置文件中获取
-	size := bootstrap.SiteConfig.SiteUploadWay.SinaAccount.DefultPicSize
 	n := len(imgType)
 	rs := []rune(imgType)
 	suffix := string(rs[6:n])
 	if suffix != "gif" {
 		suffix = "jpg"
 	}
-	sinaUrl := "https://ws" + sinaNumber + ".sinaimg.cn/" + size + "/" + pid + "." + suffix
+	sinaUrl := "https://ww" + sinaNumber + ".sinaimg.cn/" + size + "/" + pid + "." + suffix
 	return sinaUrl
 
 }

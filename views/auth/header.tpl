@@ -6,4 +6,5 @@
     <title>{{ .SiteName}}-{{ .Part}}</title>
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/static/app/css/my-login.css">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
 </head>

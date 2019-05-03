@@ -58,7 +58,7 @@ const user = {
             reject('getInfo: roles must be a non-null array !')
           }
           commit('SET_NAME', data.username)
-          commit('SET_AVATAR', 'https://ws1.sinaimg.cn/large/5d821655ly1g0t7ygl22hj208e08ctcm.jpg')
+          commit('SET_AVATAR', 'https://tva1.sinaimg.cn/large/5d821655ly1g0t7ygl22hj208e08ctcm.jpg')
           resolve(response)
         }).catch(error => {
           reject(error)

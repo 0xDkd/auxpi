@@ -26,7 +26,11 @@ var MsgFlags = map[int]string{
 	ERROR_USER_ALREADY_EXIST: "用户已存在",
 	ERROR_USER_NOT_EXIST:     "用户不存在",
 	ERROR_USER_RESET_TOKEN:   "重置 Token 错误",
-	ERROR_USER_UN_LOGIN:"用户未登录",
+	ERROR_USER_UN_LOGIN:      "用户未登录",
+
+	ERROR_UPLOAD_PARAM:       "上传参数错误",
+	ERROR_CAN_NOT_UPLOAD:     "无法上传图片到第三方图床",
+	ERROR_UPLOAD_TOKEN_ERROR: "上传 Token 错误",
 }
 
 func GetMsg(code int) string {

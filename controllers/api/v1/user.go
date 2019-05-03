@@ -1,12 +1,13 @@
 package v1
 
 import (
-	"auxpi/auxpiAll"
-	"auxpi/auxpiAll/e"
-	"auxpi/controllers/api/base"
-	"auxpi/models"
-	"auxpi/utils"
 	"strconv"
+
+	"github.com/auxpi/auxpiAll"
+	"github.com/auxpi/auxpiAll/e"
+	"github.com/auxpi/controllers/api/base"
+	"github.com/auxpi/models"
+	"github.com/auxpi/utils"
 )
 
 type User struct {
@@ -19,9 +20,23 @@ func (u *User) UserImages() {
 	uidx := uint(uid)
 	num, _ := strconv.Atoi(u.GetString("page"))
 	size, _ := strconv.Atoi(u.GetString("limit"))
+	storeID := u.Input().Get("type")
+	intStoreID, _ := strconv.Atoi(storeID)
+	sort := u.Input().Get("sort")
+	if sort == "+id" {
+		sort = "ASC"
+	} else {
+		sort = "DESC"
+	}
 
 	num, size = utils.GetPage(num, size)
-	r, t := models.GetImagesByUserId(num, size, uidx)
+	maps := make(map[string]interface{})
+	maps["user_id"] = uidx
+	if intStoreID != 0 {
+		maps["store_id"] = intStoreID
+	}
+
+	r, t := models.GetImagesByUserId(num, size, maps, sort)
 	data := make(map[string]interface{})
 	data["code"] = e.SUCCESS
 	data["msg"] = e.GetMsg(e.SUCCESS)

@@ -1,7 +1,7 @@
 package models
 
 import (
-	"auxpi/auxpiAll"
+	"github.com/auxpi/auxpiAll"
 )
 
 type Log struct {
@@ -42,7 +42,7 @@ func GetApiInfo() (apis []Report) {
 	err := db.Model(&Log{}).
 		Where("type=?", "API Call").
 		Select("COUNT(*) AS `number` , created_day AS `date`").
-		Order("created_day ASC").
+		Order("created_day DESC").
 		Group("`created_day`").
 		Limit(7).
 		Scan(&apis).Error

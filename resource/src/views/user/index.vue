@@ -32,7 +32,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Actions" >
+      <el-table-column
+        align="center"
+        label="操作"
+        fixed="right"
+      >
         <template slot-scope="scope">
           <el-button type="success" size="small" icon="el-icon-circle-check-outline" @click="jumpToUserDetailInfo(scope.row.id)">查看详情</el-button>
           <el-button type="danger" size="small" icon="el-icon-delete" @click="deleteU(scope.row.id,scope.$index)" >Delete</el-button>

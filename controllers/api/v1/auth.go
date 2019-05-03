@@ -1,17 +1,18 @@
 package v1
 
 import (
-	"auxpi/auxpiAll"
-	"auxpi/auxpiAll/e"
-	"auxpi/bootstrap"
-	"auxpi/controllers/api/base"
-	"auxpi/log"
-	"auxpi/models"
-	"auxpi/utils"
 	"encoding/json"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/auxpi/auxpiAll"
+	"github.com/auxpi/auxpiAll/e"
+	"github.com/auxpi/bootstrap"
+	"github.com/auxpi/controllers/api/base"
+	"github.com/auxpi/log"
+	"github.com/auxpi/models"
+	"github.com/auxpi/utils"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
@@ -59,6 +60,15 @@ type UserReset struct {
 
 var xrsa, _ = utils.NewXRsa()
 
+var site = auxpi.SiteBase{}
+
+func init() {
+	err := site.UnmarshalJSON([]byte(models.GetOption("site_base", "conf")))
+	if err != nil {
+		auxpiLog.SetAWarningLog("CONTROLLER", err)
+	}
+}
+
 func (a *Auth) commonStyle() {
 	a.LayoutSections = make(map[string]string)
 	a.LayoutSections["Header"] = "auth/header.tpl"
@@ -66,10 +76,10 @@ func (a *Auth) commonStyle() {
 	a.Data["xsrf_token"] = a.XSRFToken()
 	a.Layout = "auth/base.tpl"
 	a.TplName = "auth/base.tpl"
-	a.Data["SiteName"] = bootstrap.SiteConfig.SiteName
-	a.Data["Time"] = beego.Date(time.Now(),"Y")
-	a.Data["SiteLink"] = bootstrap.SiteConfig.SiteUrl
-	a.Data["Logo"] = bootstrap.SiteConfig.Logo
+	a.Data["SiteName"] = site.SiteName
+	a.Data["Time"] = beego.Date(time.Now(), "Y")
+	a.Data["SiteLink"] = site.SiteUrl
+	a.Data["Logo"] = site.Logo
 }
 
 //管理员认证
@@ -208,7 +218,7 @@ func (a *Auth) Store() {
 }
 
 //用户执行退出
-func (a *Auth) Destory() {
+func (a *Auth) Destroy() {
 	sid := a.Ctx.GetCookie("id")
 	id, _ := strconv.Atoi(sid)
 	at, _ := a.Ctx.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "at")
@@ -235,12 +245,13 @@ func (a *Auth) Destory() {
 	a.Ctx.SetCookie("id", "", -1)
 	a.Ctx.SetCookie("v", "", -1)
 	a.Ctx.SetCookie("at", "", -1)
+	a.Ctx.SetCookie("r", "", -1)
 
 	if a.Ctx.GetCookie("Admin-Token") != "" {
 		a.Ctx.SetCookie("r", "", -1)
 		a.Ctx.SetCookie("Admin-Token", "", -1)
 	}
-
+	beego.Alert("Logout Done")
 	a.Ctx.Redirect(302, "/")
 }
 
@@ -286,10 +297,9 @@ func (a *Auth) DoForgot() {
 		a.ServeJSON()
 		//邮件主题为"Hello"
 		subject := "尊敬的" + user.Username + "您正在找回您在" + bootstrap.SiteConfig.SiteName + "的密码"
-		// 邮件正文
-		body := utils.RenderMail("reset.tpl", "reset", token)
+		body := utils.RenderMail("reset.tpl", site, "reset", token)
 		//协程执行
-		go utils.SendMail(mailTo, subject, body)
+		go utils.SendMail(mailTo, subject, body, site)
 		return
 	}
 	if a.IsAjax() {
@@ -403,7 +413,7 @@ func (a *Auth) Register() {
 			AlertContent:  "管理员未开放注册",
 			ButtonType:    "primary",
 			ButtonContent: "返回首页",
-			Link:          bootstrap.SiteConfig.SiteUrl,
+			Link:          site.SiteUrl,
 		}
 		a.Data["Part"] = "注册不允许"
 		return
@@ -593,9 +603,9 @@ func (a *Auth) DoRegister() {
 	//邮件主题为"Hello"
 	subject := "欢迎注册" + bootstrap.SiteConfig.SiteName
 	// 邮件正文
-	body := utils.RenderMail("register.tpl", "register", token)
+	body := utils.RenderMail("register.tpl", site, "register", token)
 	//协程执行
-	go utils.SendMail(mailTo, subject, body)
+	go utils.SendMail(mailTo, subject, body, site)
 
 }
 

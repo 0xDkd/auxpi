@@ -1,7 +1,7 @@
 package models
 
 import (
-	"auxpi/auxpiAll"
+	"github.com/auxpi/auxpiAll"
 )
 
 type Role struct {

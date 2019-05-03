@@ -1,8 +1,9 @@
 package utils
 
 import (
-	"auxpi/bootstrap"
 	"time"
+
+	"github.com/auxpi/bootstrap"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -12,18 +13,18 @@ var jwtSecret = []byte(bootstrap.SiteConfig.JwtSecret)
 type Claims struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
-	//V        uint   `json:"v"`
+	Role     string `json:"role"`
 	jwt.StandardClaims
 }
 
 func GenerateToken(username, email string) (string, error) {
 	nowTime := time.Now()
-	expireTime := nowTime.Add( bootstrap.SiteConfig.JwtDueTime * time.Hour)
+	expireTime := nowTime.Add(bootstrap.SiteConfig.JwtDueTime * time.Hour)
 
 	claims := Claims{
 		username,
 		email,
-		//version,
+		"",
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    bootstrap.SiteConfig.SiteName,

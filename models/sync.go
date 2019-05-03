@@ -1,14 +1,15 @@
 package models
 
 import (
-	"auxpi/auxpiAll"
-	"auxpi/tools"
 	"io"
 	"net/http"
 	"os"
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/auxpi/auxpiAll"
+	"github.com/auxpi/tools"
 
 	"github.com/astaxie/beego"
 )

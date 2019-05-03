@@ -5,7 +5,6 @@ import (
 	"strconv"
 )
 
-
 func GetPage(page, limit int) (int, int) {
 	num := (page - 1) * limit
 	return num, limit
@@ -40,7 +39,6 @@ func PageHtml(nowPage int, all, pageSize int) string {
 		firstDisable = "disabled"
 		firstStatus = "true"
 	}
-
 
 	//第一页
 	pageTpl := `<nav aria-label="...">
@@ -91,12 +89,12 @@ func PageHtml(nowPage int, all, pageSize int) string {
 	}
 	sCount := strconv.Itoa(IntPageCount)
 	pageTpl += `<li class="page-item ` + lastActive + `"><a class="page-link" href="` + url + sCount + `">` + sCount + `</a></li>
-			<li class="page-item `+lastDisable+`">
+			<li class="page-item ` + lastDisable + `">
       			<a class="page-link" href="` + url + next + `" tabindex="-1" aria-disabled="` + lastDisable + `">Next</a>
     		</li>
         </ul>
     </nav>`
-	if IntPageCount <=1 {
+	if IntPageCount <= 1 {
 		pageTpl = ""
 	}
 

@@ -1,9 +1,7 @@
 package models
 
 import (
-	"auxpi/auxpiAll"
-
-	"github.com/astaxie/beego"
+	"github.com/auxpi/auxpiAll"
 )
 
 type User struct {
@@ -17,13 +15,13 @@ type User struct {
 	Token    string `gorm:"UNIQUE" json:"token"`
 	Version  uint   `json:"version"`
 
-	RoleID uint `gorm:"INDEX;" json:"role_id"`
+	RoleID uint `json:"role_id"`
 	Role   Role `json:"role"`
 
 	Image []Image `json:"images" json:"image"`
 }
 
-func CheckAdminAuth(username, password string, ) bool {
+func CheckAdminAuth(username, password string) bool {
 	var auth User
 	err := db.Model(&User{}).
 		Where(User{Username: username, Password: password}).
@@ -173,7 +171,7 @@ func GetUserEmail(username string) (string, uint) {
 func GetUserRegisterSevenDayReport() (report []Report) {
 	err := db.Model(&User{}).
 		Select("COUNT(*) AS `number` , created_day AS `date`").
-		Order("created_day ASC").
+		Order("created_day DESC").
 		Group("created_day").
 		Limit(7).
 		Scan(&report).Error
@@ -283,17 +281,15 @@ func MigrateUsers() error {
 }
 
 func RegisterAdmin(u, pass, token, email string) {
-	if beego.BConfig.RunMode == "dev" {
-		user := &User{}
-		user.ID = 1
-		user.Password = pass
-		user.Username = u
-		user.Token = token
-		user.Status = 1
-		user.IsAdmin = true
-		user.Email = email
-		user.Version = 1
-		user.RoleID = 1
-		db.Create(user)
-	}
+	user := &User{}
+	user.ID = 1
+	user.Password = pass
+	user.Username = u
+	user.Token = token
+	user.Status = 1
+	user.IsAdmin = true
+	user.Email = email
+	user.Version = 1
+	user.RoleID = 1
+	db.Create(user)
 }

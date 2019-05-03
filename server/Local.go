@@ -1,46 +1,78 @@
+// Copyright (c) 2019 aimerforreimu. All Rights Reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+//
+//  GNU GENERAL PUBLIC LICENSE
+//                        Version 3, 29 June 2007
+//
+//  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+//  Everyone is permitted to copy and distribute verbatim copies
+// of this license document, but changing it is not allowed.
+//
+// repo: https://github.com/aimerforreimu/auxpi
+
 package server
 
 import (
-	"auxpi/bootstrap"
 	"bufio"
+	"errors"
 	"os"
 	"time"
 
 	"github.com/astaxie/beego"
+	auxpi "github.com/auxpi/auxpiAll"
+	"github.com/auxpi/bootstrap"
+	"github.com/auxpi/models"
 )
 
 type Local struct {
+	FileLimit []string
+	MaxSize   int
 }
 
-//获取本地图片链接
-func (this *Local) UpLoadToLocal(name string, fileContent []byte) (string, string, string, string) {
-	//
-	if !bootstrap.SiteConfig.SiteUploadWay.LocalStore.Open {
-		return "", "", "", ""
+var local = auxpi.LocalStore{}
+var site = auxpi.SiteBase{}
+
+
+func (s *Local) Upload(image *ImageParam) (ImageReturn, error) {
+	var err = local.UnmarshalJSON([]byte(models.GetOption("local", "conf")))
+	if err!=nil {
+		return ImageReturn{}, nil
+	}
+	err = site.UnmarshalJSON([]byte(models.GetOption("site_base", "conf")))
+	if !local.Status {
+		err := errors.New("LocalStorage is close by user,please open it ")
+		return ImageReturn{}, err
 	}
 
-	host := &bootstrap.SiteConfig.SiteUrl
-	storeLocation := &bootstrap.SiteConfig.SiteUploadWay.LocalStore.StorageLocation
-	softLink := &bootstrap.SiteConfig.SiteUploadWay.LocalStore.Link
+	host := &site.SiteUrl
+	storeLocation := &local.StorageLocation
+	softLink := &local.Link
 	//修正URL
 	bootstrap.FormatUrl(softLink)
 	bootstrap.FormatUrl(host)
 	bootstrap.FormatUrl(storeLocation)
 
-	suffix := this.storeImage(*storeLocation, name, fileContent)
+	suffix := s.storeImage(*storeLocation, image.Name, *image.Content)
 	url := *host + *softLink + suffix
 	beego.Alert(url)
 	backup := *host + "backup/" + suffix
 	str := `ZXCVBNMASDFGHJKLQWERTYUIOPzxcvbnmasdfghjklqwertyuiop1234567890`
 	randomStr := bootstrap.GetRandomString(16, str)
-	return url, backup, randomStr, *storeLocation + suffix
+	return ImageReturn{
+		Url:    url,
+		Delete: randomStr,
+		Path:   *storeLocation + suffix,
+		Other:  backup,
+		ID:     12,
+	}, nil
 }
 
 //储存图片
-func (this *Local) storeImage(path string, n string, fileContent []byte) string {
+func (s *Local) storeImage(path string, n string, fileContent []byte) string {
 	nowTime := beego.Date(time.Now(), "Y/m/d/")
 	str := `ZXCVBNMASDFGHJKLQWERTYUIOPzxcvbnmasdfghjklqwertyuiop1234567890`
-	suffix := bootstrap.GetRandomString(16, str) + "." + this.getImageSuffix(n)
+	suffix := bootstrap.GetRandomString(16, str) + "." + bootstrap.GetImageSuffix(n)
 	dir := path + nowTime
 	file := dir + suffix
 	bootstrap.CheckPath(dir)
@@ -60,15 +92,3 @@ func (this *Local) storeImage(path string, n string, fileContent []byte) string 
 	return nowTime + suffix
 }
 
-//获取图片后缀
-func (this *Local) getImageSuffix(name string) (suffix string) {
-	n := len(name)
-	rs := []rune(name)
-	suffix = string(rs[n-3 : n])
-	beego.Alert(suffix)
-	if suffix == "peg" {
-		suffix = "jpeg"
-	}
-
-	return suffix
-}
