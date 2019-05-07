@@ -9,6 +9,8 @@
 [![GitHub forks](https://img.shields.io/github/forks/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI/network)
 [![GitHub stars](https://img.shields.io/github/stars/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI/stargazers)
 [![GitHub license](https://img.shields.io/github/license/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI)
+[![Travis CI](https://travis-ci.org/aimerforreimu/auxpi.svg?branch=dev)](https://travis-ci.org/aimerforreimu/auxpi)
+
 
 本项目使用 beego + vue + element-ui 进行开发
 
