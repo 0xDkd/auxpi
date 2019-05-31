@@ -5,26 +5,12 @@
 
 **集合多家 API 的新一代图床**
 
-[![GitHub issues](https://img.shields.io/github/issues/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI/issues)
+[![Travis CI](https://travis-ci.org/aimerforreimu/auxpi.svg?branch=dev)](https://travis-ci.org/aimerforreimu/auxpi)
 [![GitHub forks](https://img.shields.io/github/forks/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI/network)
 [![GitHub stars](https://img.shields.io/github/stars/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI/stargazers)
 [![GitHub license](https://img.shields.io/github/license/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI)
-[![Travis CI](https://travis-ci.org/aimerforreimu/auxpi.svg?branch=dev)](https://travis-ci.org/aimerforreimu/auxpi)
 
-
-本项目使用 beego + vue + element-ui 进行开发
-
-```text
-    _       __  __  ___ _____
-    /_\  /\ /\ \/ / / _ \\_   \
-   //_\\/ / \ \  / / /_)/ / /\/
-/  _  \ \_/ /  \/ ___/\/ /_
-\_/ \_/\___/_/\_\/   \____/
-
-🍭 A NEW API IMAGES STORE TOOL 🍭
-
-
-```
+![Snipaste_2019-05-12_22-16-26.png](https://i.loli.net/2019/05/12/5cd82ac5cd74d.png)
 </div>
 <br>
 
@@ -84,7 +70,7 @@ https://github.com/aimerforreimu/AUXPI/wiki/%E5%9B%BE%E5%BA%8A%E9%85%8D%E7%BD%AE
 
 
 
-演示站点为 [https://test.0w0.tn/](https://test.0w0.tn/)
+演示站点为 [https://test.demo-1s.com/](https://test.demo-1s.com/)
 
 请勿滥用，滥用者将被加入 ip 黑名单并且放到 github 上公示
 
@@ -350,3 +336,4 @@ API 未开启返回值
 ## LICENSE
 
 GNU General Public License v3.0
+

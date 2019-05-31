@@ -12,7 +12,7 @@ Info_font_prefix="\033[32m" && Error_font_prefix="\033[31m" && Info_background_p
 install_path='/root/auxpi'
 auxpi_path="${install_path}/build/linux"
 name="auxpi"
-ver="2.3.6"
+ver="2.3.8"
 
 function auxpi_help(){
     echo "Auxpi Installer V1.0"
