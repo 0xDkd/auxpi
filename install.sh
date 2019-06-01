@@ -11,6 +11,7 @@ export PATH
 Info_font_prefix="\033[32m" && Error_font_prefix="\033[31m" && Info_background_prefix="\033[42;37m" && Error_background_prefix="\033[41;37m" && Font_suffix="\033[0m"
 install_path='/root/auxpi'
 auxpi_path="${install_path}/build/linux"
+auxpi_backup_path='/root/auxpi_backup'
 name="auxpi"
 ver="2.3.9"
 
@@ -19,6 +20,7 @@ function auxpi_help(){
     echo
     echo "all  ---- Install Nginx Mysql Auxpi"
     echo "install ---- Install Auxpi"
+    echo "update ---- Update Auxpi"
     echo "mysql ---- Install Mysql"
     echo "nginx ---- Install Nginx"
     echo "help ---- Show help info"
@@ -51,8 +53,8 @@ check_root(){
 function install() {
     [[  -e "${install_path}/auxpi" ]] && echo -e "${Error_font_prefix}[ERROR]${Font_suffix}已经安装无需再次安装" && exit 1
     check_root
-    mkdir -p $install_path
-    cd $install_path
+    mkdir -p ${install_path}
+    cd ${install_path}
     wget --no-check-certificate -O "auxpi.tar.gz" "https://github.com/aimerforreimu/AUXPI/releases/download/${ver}/auxpi-${ver}-linux.tar.gz"
     [[ ! -e "auxpi.tar.gz" ]] && echo -e "${Error_font_prefix}[ERROR]${Font_suffix} auxpi 下载失败" && exit 1
     tar zxvf "auxpi.tar.gz"
@@ -62,13 +64,29 @@ function install() {
     cp -r ${auxpi_path}/* ${install_path}
     [[ ! -e "${install_path}/auxpi" ]] && echo -e "${Error_font_prefix}[ERROR]${Font_suffix} auxpi 文件移动出错" && exit 1
     rm -rf "${install_path}/build"
-    cd $install_path
+    cd ${install_path}
     chmod +x auxpi
     ./auxpi init
     echo -e "${Info_font_prefix}[INFO]${Font_suffix} auxpi 初始化完成:"
     echo -e "${Info_font_prefix}安装路径: ${install_path}${Font_suffix}"
     echo -e "${Info_font_prefix}配置文件: ${install_path}/conf/siteConfig.json ${Font_suffix}"
     echo -e "${Info_font_prefix}其它教程: https://github.com/aimerforreimu/AUXPI/wiki ${Font_suffix}"
+}
+
+function update() {
+    [[ ! -e "${install_path}/auxpi" ]] && echo -e "${Error_font_prefix}[ERROR]${Font_suffix}您没有安装 auxpi，请先安装程序" && exit 1
+    check_root
+    [[ ! -e "${install_path}/auxpi_backup" ]] && mkdir -p ${auxpi_backup_path}
+    cp -r ${install_path}/conf ${auxpi_backup_path}
+    cp -r ${install_path}/public ${auxpi_backup_path}
+    # 移除旧版本
+    rm -rf ${install_path}
+    # 安装新版本
+    install
+    # 回复原来的配置和图片
+    rm -rf ${install_path}/conf && mv ${auxpi_backup_path}/conf ${install_path}
+    rm -rf ${install_path}/public && mv ${auxpi_backup_path}/public ${install_path}
+
 }
 
 function install_mysql() {
@@ -89,10 +107,13 @@ function install_all() {
 # Initialization step
 check_sys
 action=$1
-[ -z $1 ] && action=help
+[[ -z $1 ]] && action=help
 case "$action" in
 install)
     install
+    ;;
+update)
+    update
     ;;
 nginx)
     install_nginx
