@@ -27,6 +27,7 @@
 ## 项目截图
 
 ![首页](https://ws2.sinaimg.cn/large/007DFgJwgy1g10ecblh1dj31hc0nw770.jpg)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Faimerforreimu%2Fauxpi.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Faimerforreimu%2Fauxpi?ref=badge_shield)
 
 ![管理员后台](https://ws3.sinaimg.cn/large/007DFgJwgy1g10eavu2zqj31ha0obdii.jpg)
 
@@ -337,3 +338,6 @@ API 未开启返回值
 
 GNU General Public License v3.0
 
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Faimerforreimu%2Fauxpi.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Faimerforreimu%2Fauxpi?ref=badge_large)
