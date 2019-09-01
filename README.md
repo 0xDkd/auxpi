@@ -9,6 +9,8 @@
 [![GitHub forks](https://img.shields.io/github/forks/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI/network)
 [![GitHub stars](https://img.shields.io/github/stars/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI/stargazers)
 [![GitHub license](https://img.shields.io/github/license/aimerforreimu/AUXPI.svg)](https://github.com/aimerforreimu/AUXPI)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Faimerforreimu%2Fauxpi.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Faimerforreimu%2Fauxpi?ref=badge_shield)
+
 
 ![Snipaste_2019-05-12_22-16-26.png](https://i.loli.net/2019/05/12/5cd82ac5cd74d.png)
 </div>
@@ -27,7 +29,6 @@
 ## 项目截图
 
 ![首页](https://ws2.sinaimg.cn/large/007DFgJwgy1g10ecblh1dj31hc0nw770.jpg)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Faimerforreimu%2Fauxpi.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Faimerforreimu%2Fauxpi?ref=badge_shield)
 
 ![管理员后台](https://ws3.sinaimg.cn/large/007DFgJwgy1g10eavu2zqj31ha0obdii.jpg)
 
