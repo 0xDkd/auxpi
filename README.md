@@ -76,6 +76,8 @@ https://github.com/aimerforreimu/AUXPI/wiki/%E5%9B%BE%E5%BA%8A%E9%85%8D%E7%BD%AE
 
 请勿滥用，滥用者将被加入 ip 黑名单并且放到 github 上公示
 
+**请注意，目前已经开启图片鉴黄，且等级较高，如果试用程序请尽量上传风景图，否则有可能无法上传**
+
 演示站点管理员账户:
 ```text
 用户名:admin123
