@@ -304,6 +304,7 @@ func (b *BeegoHTTPRequest) PostFile(formname, filename string) *BeegoHTTPRequest
 	b.files[formname] = filename
 	return b
 }
+
 ////PostFile with content
 //func (b *BeegoHTTPRequest) PostFileWithContent(formname,filename string,) {
 //

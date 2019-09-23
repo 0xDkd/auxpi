@@ -22,10 +22,10 @@ import (
 )
 
 func Create() {
-	a := gormadapter.NewAdapter("mysql", "root:root@tcp(127.0.0.1:3306)/auxpi",true)
+	a := gormadapter.NewAdapter("mysql", "root:root@tcp(127.0.0.1:3306)/auxpi", true)
 	e := casbin.NewEnforcer("conf/rbac_model.conf", a)
 	err := e.LoadPolicy()
-	if err!=nil {
+	if err != nil {
 		fmt.Println(err)
 	}
 
@@ -33,7 +33,7 @@ func Create() {
 	e.AddGroupingPolicy("alice", "admin", "app")
 
 	err = e.SavePolicy()
-	if err!=nil {
+	if err != nil {
 		fmt.Println(err)
 	}
 }

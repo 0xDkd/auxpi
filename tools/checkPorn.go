@@ -18,8 +18,6 @@ type CheckPorn interface {
 }
 
 //https://www.moderatecontent.com/documentation/signup
-func CheckImage()  {
-	
+func CheckImage() {
+
 }
-
-

@@ -25,7 +25,6 @@ type PagesController struct {
 	beego.Controller
 }
 
-
 func (i *PagesController) commonStyle() {
 	un, _ := i.GetSecureCookie(bootstrap.SiteConfig.AuxpiSalt, "uname")
 

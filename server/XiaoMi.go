@@ -29,8 +29,6 @@ type XiaoMi struct {
 func (s *XiaoMi) Upload(image *ImageParam) (ImageReturn, error) {
 	url := "https://shopapi.io.mi.com/homemanage/shop/uploadpic"
 
-
-
 	file := &auxpi.FormFile{
 		Name:  image.Name,
 		Key:   "pic",

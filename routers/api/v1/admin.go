@@ -87,8 +87,6 @@ func RegisterAdminApi() {
 		beego.NSRouter("/delete_user", &v1.Admin{}, "post:DeleteUser"),
 		beego.NSRouter("/get_sync_images", &v1.Admin{}, "get:GetSyncImages"),
 		beego.NSRouter("/del_sync_images", &v1.Admin{}, "post:DelSyncImages"),
-
-
 	)
 	//管理员登入
 	beego.AddNamespace(ns)

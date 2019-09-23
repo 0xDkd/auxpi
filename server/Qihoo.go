@@ -22,7 +22,7 @@ import (
 
 type Qihoo struct {
 	FileLimit []string
-	MaxSize int
+	MaxSize   int
 }
 
 func (this *Qihoo) UploadToQihoo(img []byte, imgInfo string, imgType string) string {

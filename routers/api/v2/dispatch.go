@@ -44,4 +44,3 @@ func RegisterApi() {
 //		beego.Router("api/v1/upload", &v1.ApiUploadController{}, "post:UpLoadHandle")
 //	}
 //}
-

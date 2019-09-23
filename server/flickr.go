@@ -43,9 +43,9 @@ func (s *Flickr) Upload(image *ImageParam) (ImageReturn, error) {
 		return ImageReturn{}, err
 	}
 	return ImageReturn{
-		Url: flickrGetPicUrl(resp.ID),
-		ID:  5,
-	},
+			Url: flickrGetPicUrl(resp.ID),
+			ID:  5,
+		},
 		nil
 }
 
