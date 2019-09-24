@@ -69,7 +69,7 @@ build: ## 构建
 
 .PHONY: docker
 docker: ## 构建镜像
-	@docker build -t auxpi:base -f hack/docker/Dockerfile .
+#	@docker build -t auxpi:base -f hack/docker/Dockerfile .
 	@docker build -t ysicing/auxpi .
 
 help: ## this help
