@@ -26,8 +26,6 @@ type TouTiao struct {
 func (s *TouTiao) Upload(image *ImageParam) (ImageReturn, error) {
 	url := "https://mp.toutiao.com/upload_photo/?type=json"
 
-
-
 	file := &auxpi.FormFile{
 		Name:  image.Name,
 		Key:   "photo",

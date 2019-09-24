@@ -36,8 +36,8 @@ func init() {
 		testRouter()
 		//options
 		beego.Router("/api/v1/options/stores", &v1.OptionController{}, "get:GetStoreOptions")
-		beego.Router("/api/v1/options/info",&v1.OptionController{}, "get:Get")
-		beego.Router("/api/v1/options/update",&v1.OptionController{},"post:Update")
+		beego.Router("/api/v1/options/info", &v1.OptionController{}, "get:Get")
+		beego.Router("/api/v1/options/update", &v1.OptionController{}, "post:Update")
 		beego.Router("/clear", &v1.Admin{}, "get:ClearCache")
 
 	}

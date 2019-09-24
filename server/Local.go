@@ -33,10 +33,9 @@ type Local struct {
 var local = auxpi.LocalStore{}
 var site = auxpi.SiteBase{}
 
-
 func (s *Local) Upload(image *ImageParam) (ImageReturn, error) {
 	var err = local.UnmarshalJSON([]byte(models.GetOption("local", "conf")))
-	if err!=nil {
+	if err != nil {
 		return ImageReturn{}, nil
 	}
 	err = site.UnmarshalJSON([]byte(models.GetOption("site_base", "conf")))
@@ -91,4 +90,3 @@ func (s *Local) storeImage(path string, n string, fileContent []byte) string {
 
 	return nowTime + suffix
 }
-

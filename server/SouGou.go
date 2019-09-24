@@ -62,7 +62,7 @@ func (s *SouGou) Upload(image *ImageParam) (ImageReturn, error) {
 	respUrl := string(body)
 	respUrl = strings.Replace(respUrl, "http", "https", -1)
 	return ImageReturn{
-		Url: "https://images.weserv.nl/?url="+respUrl,
+		Url: "https://images.weserv.nl/?url=" + respUrl,
 		ID:  1,
 	}, nil
 }

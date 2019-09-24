@@ -30,8 +30,6 @@ type SouHu struct {
 func (s *SouHu) Upload(image *ImageParam) (ImageReturn, error) {
 	url := "http://changyan.sohu.com/api/2/comment/attachment"
 
-
-
 	file := &auxpi.FormFile{
 		Name:  image.Name,
 		Key:   "file",

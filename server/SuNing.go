@@ -29,8 +29,6 @@ type SuNing struct {
 func (this *SuNing) Upload(image *ImageParam) (ImageReturn, error) {
 	url := "http://review.suning.com/imageload/uploadImg.do"
 
-
-
 	file := &auxpi.FormFile{
 		Name:  image.Name,
 		Key:   "Filedata",

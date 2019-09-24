@@ -215,5 +215,3 @@ func (s *Sina) getSinaUrl(body []byte, imgType string) string {
 //	fmt.Println(string(body))
 //	return s.getSinaUrl(body, imgType)
 //}
-
-

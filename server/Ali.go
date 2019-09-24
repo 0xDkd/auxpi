@@ -54,8 +54,8 @@ func (s *Ali) Upload(image *ImageParam) (ImageReturn, error) {
 	j := auxpi.AliResp{}
 	j.UnmarshalJSON([]byte(data))
 	return ImageReturn{
-		Url: j.Url,
-		ID:  11,
-	},
+			Url: j.Url,
+			ID:  11,
+		},
 		nil
 }

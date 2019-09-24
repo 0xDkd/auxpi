@@ -40,7 +40,7 @@ func (a *ApiUploadController) UpLoadHandle() {
 	//验证
 	validate := a.Validate(h.Header.Get("Content-Type"), h.Filename)
 	if validate {
-		resp,_ := a.UploadHandle(userID, apiSelect, h, ip, true)
+		resp, _ := a.UploadHandle(userID, apiSelect, h, ip, true)
 		a.Data["json"] = resp
 		a.ServeJSON()
 	}

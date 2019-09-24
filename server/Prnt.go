@@ -32,7 +32,6 @@ type Prnt struct {
 func (s *Prnt) Upload(image *ImageParam) (ImageReturn, error) {
 	url := "https://prntscr.com/upload.php"
 
-
 	file := &auxpi.FormFile{
 		Name:  image.Name,
 		Key:   "image",

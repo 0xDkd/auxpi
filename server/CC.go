@@ -44,10 +44,10 @@ func (s *CC) Upload(image *ImageParam) (ImageReturn, error) {
 	url = "https://upload.cc/" + j.SuccessImage[0].URL
 	deleteJson := `[{"path":"` + j.SuccessImage[0].URL + `",key":"` + j.SuccessImage[0].Delete + `"}]`
 	return ImageReturn{
-		Url:    url,
-		Delete: deleteJson,
-		ID:     4,
-	},
+			Url:    url,
+			Delete: deleteJson,
+			ID:     4,
+		},
 		nil
 }
 

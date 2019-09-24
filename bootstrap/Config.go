@@ -33,6 +33,7 @@ type AuxpiConfig struct {
 }
 
 var Cache = initCache()
+
 //var Cache, _ = cache.NewCache("memory", `{"interval":60}`)
 
 var SiteConfig *auxpi.SiteConfig
@@ -175,7 +176,7 @@ func init() {
 
 		//Db Init
 		siteconfig.DbOption.UseDb = true
-		siteconfig.DbOption.DbType = "mysql"
+		siteconfig.DbOption.DbType = "sqlite3"
 		siteconfig.DbOption.DbHost = "127.0.0.1:3306"
 		siteconfig.DbOption.DbName = "auxpi"
 		siteconfig.DbOption.DbUser = "root"
@@ -248,6 +249,6 @@ func initCache() cache.Cache {
 			panic(err)
 		}
 		return c
-		
+
 	}
 }

@@ -26,8 +26,6 @@ type VimCN struct {
 func (s *VimCN) Upload(image *ImageParam) (ImageReturn, error) {
 	url := "https://img.vim-cn.com/"
 
-
-
 	file := &auxpi.FormFile{
 		Name:  image.Name,
 		Key:   "image",

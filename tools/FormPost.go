@@ -95,7 +95,7 @@ func SuNingFormPost(fileContent *auxpi.FormFile, url string) string {
 	return string(body)
 }
 func PayLoadFormPost(fileContent *auxpi.FormFile, url string) string {
-	payload := strings.NewReader("------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"pic\"; filename=\""+fileContent.Name+"\"\r\nContent-Type: image/png\r\n\r\n"+string(fileContent.Value)+"\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--")
+	payload := strings.NewReader("------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"pic\"; filename=\"" + fileContent.Name + "\"\r\nContent-Type: image/png\r\n\r\n" + string(fileContent.Value) + "\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--")
 	req, _ := http.NewRequest("POST", url, payload)
 
 	req.Header.Add("content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW")
@@ -113,4 +113,3 @@ func PayLoadFormPost(fileContent *auxpi.FormFile, url string) string {
 //func CreateHtttClient()  {
 //
 //}
-

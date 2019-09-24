@@ -28,7 +28,6 @@ type OOXX struct {
 func (s *OOXX) Upload(image *ImageParam) (ImageReturn, error) {
 	url := "https://ooxx.ooo/upload"
 
-
 	file := &auxpi.FormFile{
 		Name:  image.Name,
 		Key:   "files[]",

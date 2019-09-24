@@ -19,7 +19,6 @@ func init() {
 	beego.TestBeegoInit(apppath)
 }
 
-
 func TestAuxpi(t *testing.T) {
 	r, _ := http.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()

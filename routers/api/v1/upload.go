@@ -29,6 +29,6 @@ func RegisterOpenApi() {
 //需要控制的 API
 func RegisterControlApi() {
 	//if bootstrap.SiteConfig.OpenApiUpLoad {
-		beego.Router("api/v1/upload", &v1.ApiUploadController{}, "post:UpLoadHandle")
+	beego.Router("api/v1/upload", &v1.ApiUploadController{}, "post:UpLoadHandle")
 	//}
 }
