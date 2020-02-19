@@ -51,14 +51,16 @@ func (a *DispatchController) UploadToRoot() {
 
 	}
 	//默认游客
-	userID := 0
+	//userID := 0
 	ip := a.Ctx.Input.IP()
 	//文件验证
 	//直接获取文件ctx 中的信息
-	u := a.Ctx.Input.GetData("user_info")
-	user, _ := u.(models.User)
+	// u := a.Ctx.Input.GetData("user_info")
+	// user, _ := u.(models.User)
 
-	userID = user.ID
+	//userID = user.ID
+	// No authorization here. Get user id from cookie.
+	userID, _ := strconv.Atoi(a.Ctx.GetCookie("id"))
 	f, h, err := a.GetFile("image")
 	if f == nil {
 		a.Data["json"] = a.ErrorResp(e.ERROR_FILE_IS_EMPTY)
@@ -77,7 +79,9 @@ func (a *DispatchController) UploadToRoot() {
 	//验证
 	validate := a.Validate(h.Header.Get("Content-Type"), h.Filename)
 	if validate {
-		resp, re := a.UploadHandle(userID, dispatch.Root, h, ip, false)
+		// save image to table auxpi_images
+		// resp, re := a.UploadHandle(userID, dispatch.Root, h, ip, false)
+		resp, re := a.UploadHandle(userID, dispatch.Root, h, ip, true)
 		if resp.Code == 200 {
 			hash := bootstrap.GenerateUniqueString()
 			//转 short
