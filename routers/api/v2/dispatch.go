@@ -16,12 +16,12 @@ package v2Router
 import (
 	"github.com/astaxie/beego"
 	v2 "github.com/auxpi/controllers/api/v2"
-	"github.com/auxpi/middleware"
 )
 
 //上传中间件
 func RegisterUploadMiddleWare() {
-	beego.InsertFilter("/api/v2/upload", beego.BeforeExec, middleware.Upload)
+	// No authorization
+	// beego.InsertFilter("/api/v2/upload", beego.BeforeExec, middleware.Upload)
 
 }
 

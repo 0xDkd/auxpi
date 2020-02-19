@@ -19,7 +19,9 @@
     });
 
     $("#image").fileinput({
-        uploadUrl: "{{ urlfor "WebUpLoadController.UpLoadHandle"}}",
+        // replace /v1/web_upload to /v2/upload
+        // uploadUrl: "{{ urlfor "WebUpLoadController.UpLoadHandle"}}",
+        uploadUrl: "{{ urlfor "DispatchController.UploadToRoot"}}",
         language: "zh",
         uploadAsync: true,
         overwriteInitial: false,

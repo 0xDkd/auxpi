@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/auxpi/auxpiAll"
+	auxpi "github.com/auxpi/auxpiAll"
 )
 
 type Distribution struct {
@@ -35,6 +35,8 @@ func CreateDistribution(distribution Distribution) bool {
 		Short:   distribution.Short,
 		RootUrl: distribution.RootUrl,
 		Number:  0,
+		// Save user id, both admin and users can dispatch images now.
+		UserID: distribution.UserID,
 	}).Error
 	return modelsError(auxpi.ErrorToString(err))
 }

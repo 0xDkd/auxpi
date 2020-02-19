@@ -53,7 +53,8 @@ func (s *Local) Upload(image *ImageParam) (ImageReturn, error) {
 	bootstrap.FormatUrl(storeLocation)
 
 	suffix := s.storeImage(*storeLocation, image.Name, *image.Content)
-	url := *host + *softLink + suffix
+	// Miss a "/" here
+	url := *host + *softLink + "/" + suffix
 	beego.Alert(url)
 	backup := *host + "backup/" + suffix
 	str := `ZXCVBNMASDFGHJKLQWERTYUIOPzxcvbnmasdfghjklqwertyuiop1234567890`
