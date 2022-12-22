@@ -106,7 +106,7 @@ bash build.sh mac # 编译 mac 程序
 bash build.sh windows # 编译 Windows 程序
 bash build.sh linux #编译 linux 程序
 bash build.sh all 2.2.0 clear # 编译程序，分别打包所有的平台的项目，2.2.0 为版本号，清空编译以后文件，只保留压缩包
-bahs build.sh help #查看帮助
+bash build.sh help #查看帮助
 ```
 
 打包前端
