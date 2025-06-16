@@ -48,10 +48,10 @@ func (w *WebUpLoadController) UpLoadHandle() {
 	//获取上传类型
 	apiSelect := w.GetString("apiSelect")
 	f, h, err := w.GetFile("image")
-	defer f.Close()
 	if err != nil {
 		log.Fatal("File Upload Err", err)
 	}
+	defer f.Close()
 	//是否为空文件
 	if f == nil {
 		w.ErrorResp(e.ERROR_FILE_IS_EMPTY)
